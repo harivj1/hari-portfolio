@@ -1,0 +1,95 @@
+<svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- base dark terminal gradient, echoing body's radial purple glow -->
+    <radialGradient id="baseGlow" cx="82%" cy="8%" r="60%">
+      <stop offset="0%" stop-color="#2a1a5e" stop-opacity="0.22"/>
+      <stop offset="45%" stop-color="#030612" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="cyanGlow" cx="18%" cy="92%" r="55%">
+      <stop offset="0%" stop-color="#0a3a44" stop-opacity="0.18"/>
+      <stop offset="50%" stop-color="#030612" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- vignette: keeps center clean/low-contrast, edges slightly more detailed -->
+    <radialGradient id="vignette" cx="50%" cy="46%" r="62%">
+      <stop offset="0%" stop-color="#030612" stop-opacity="0"/>
+      <stop offset="62%" stop-color="#030612" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000103" stop-opacity="0.55"/>
+    </radialGradient>
+
+    <!-- fine scanlines, classic CRT/terminal texture -->
+    <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="4" fill="transparent"/>
+      <line x1="0" y1="1.5" x2="4" y2="1.5" stroke="#3e63dd" stroke-opacity="0.025" stroke-width="1"/>
+    </pattern>
+
+    <!-- faint dot grid -->
+    <pattern id="dotgrid" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#6e8bff" fill-opacity="0.10"/>
+    </pattern>
+
+    <!-- grain/static noise -->
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" result="noise"/>
+      <feColorMatrix in="noise" type="matrix"
+        values="0 0 0 0 0.33  0 0 0 0 0.55  0 0 0 0 1  0 0 0 0.05 0"/>
+    </filter>
+
+    <style>
+      .mono { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+    </style>
+  </defs>
+
+  <!-- base fill -->
+  <rect width="1920" height="1080" fill="#030612"/>
+
+  <!-- glows -->
+  <rect width="1920" height="1080" fill="url(#baseGlow)"/>
+  <rect width="1920" height="1080" fill="url(#cyanGlow)"/>
+
+  <!-- grid + scanlines, edges emphasized more than center via lower overall opacity -->
+  <rect width="1920" height="1080" fill="url(#dotgrid)" opacity="0.5"/>
+  <rect width="1920" height="1080" fill="url(#scanlines)"/>
+
+  <!-- grain -->
+  <rect width="1920" height="1080" filter="url(#grain)" opacity="0.4"/>
+
+  <!-- subtle circuit-trace accent lines, corners only -->
+  <g stroke="#3e63dd" stroke-opacity="0.14" stroke-width="1" fill="none">
+    <path d="M0,140 H160 L200,180 H420"/>
+    <path d="M0,220 H90 L120,250 H260"/>
+    <path d="M1920,900 H1740 L1700,940 H1520"/>
+    <path d="M1920,960 H1830 L1800,990 H1660"/>
+  </g>
+  <g fill="#3e63dd" fill-opacity="0.5">
+    <circle cx="420" cy="180" r="2.5"/>
+    <circle cx="260" cy="250" r="2"/>
+    <circle cx="1520" cy="940" r="2.5"/>
+    <circle cx="1660" cy="990" r="2"/>
+  </g>
+
+  <!-- terminal chrome details, corners only, no large text -->
+  <g class="mono" fill="#63f58b" fill-opacity="0.55" font-size="13">
+    <text x="36" y="40">root@kali:~# _</text>
+  </g>
+  <rect x="168" y="27" width="9" height="15" fill="#63f58b" fill-opacity="0.55">
+    <animate attributeName="fill-opacity" values="0.55;0.05;0.55" dur="1.2s" repeatCount="indefinite"/>
+  </rect>
+
+  <g class="mono" fill="#9ca9c9" fill-opacity="0.4" font-size="12">
+    <text x="1590" y="1050">[ session: encrypted ]</text>
+    <text x="1590" y="1068">tty1 · 0x7f2a</text>
+  </g>
+
+  <g class="mono" fill="#a45cff" fill-opacity="0.35" font-size="11">
+    <text x="36" y="1060">nmap -sV -T4 10.0.0.0/24</text>
+  </g>
+
+  <!-- thin top/bottom hairlines, terminal-window feel without a frame -->
+  <line x1="0" y1="0.5" x2="1920" y2="0.5" stroke="#3e63dd" stroke-opacity="0.08"/>
+  <line x1="0" y1="1079.5" x2="1920" y2="1079.5" stroke="#3e63dd" stroke-opacity="0.08"/>
+
+  <!-- vignette on top, keeps center clean for hero content -->
+  <rect width="1920" height="1080" fill="url(#vignette)"/>
+</svg>
