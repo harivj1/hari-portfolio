@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
 
 :root {
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   color: #e7edff;
   background: #0d1428;
   font-synthesis: none;
@@ -69,7 +69,7 @@ a {
   background: rgba(13, 20, 40, 0.82);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(112, 128, 255, 0.16);
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 .sb-inner {
@@ -162,7 +162,7 @@ a {
     0 1px 0 rgba(255, 255, 255, 0.03) inset,
     0 50px 120px -40px rgba(0, 0, 0, 0.9);
   overflow: hidden;
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 .term-bar {
@@ -219,7 +219,7 @@ a {
 
 /* page content keeps its normal typography once it's inside the terminal */
 .term-body > .section {
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 16px;
   line-height: 1.6;
   color: #eef2ff;
@@ -230,7 +230,7 @@ a {
 h1,
 h2,
 h3 {
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 #home {
@@ -280,7 +280,7 @@ h3 {
   margin: 2px 0 0;
   padding-top: 16px;
   border-top: 1px dashed rgba(164, 92, 255, 0.28);
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 12.5px;
   line-height: 1.65;
   transform: translateX(18px);
@@ -363,7 +363,7 @@ h3 {
 }
 
 .tmux-sep-label {
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 14.5px;
   font-weight: 700;
   letter-spacing: 0.07em;
@@ -408,7 +408,7 @@ h3 {
 
 .section-cmd {
   margin: 18px 0 0;
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 12.5px;
   color: #ffffff;
   text-align: left;
@@ -502,7 +502,7 @@ h3 {
 .eyebrow,
 .section-kicker,
 .terminal-line {
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   letter-spacing: 0.08em;
 }
 
@@ -582,7 +582,7 @@ h3 {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 11px;
   letter-spacing: 0.08em;
   color: #ffffff;
@@ -626,7 +626,7 @@ h3 {
   flex-wrap: wrap;
   gap: 9px 24px;
   color: #ffffff;
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 12.5px;
 }
 
@@ -704,7 +704,7 @@ h3 {
 
 .about-edu-label {
   margin: 0 0 20px;
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 14.5px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -750,7 +750,7 @@ h3 {
 
 .edu-meta {
   margin: 5px 0 0;
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 12px;
   color: var(--muted);
 }
@@ -833,7 +833,7 @@ h3 {
 
 .tags span,
 .skills span {
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 11px;
   border: 1px solid rgba(110, 139, 255, 0.22);
   color: #ffffff;
@@ -887,7 +887,7 @@ h3 {
 }
 
 .cert-status {
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 10px;
   letter-spacing: 0.1em;
   color: var(--green);
@@ -911,7 +911,7 @@ h3 {
 
 .cert-issuer {
   margin-top: 6px !important;
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 11px;
   color: var(--purple);
 }
@@ -922,7 +922,7 @@ h3 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 10px;
   color: #ffffff;
 }
@@ -933,7 +933,7 @@ h3 {
   align-items: center;
   gap: 7px;
   color: var(--cyan);
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 12px;
 }
 
@@ -962,7 +962,7 @@ h3 {
 
 .skill-group-title {
   margin: 0 0 16px;
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 14.5px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -1033,7 +1033,7 @@ h3 {
 
 .xp-period {
   flex-shrink: 0;
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 12px;
   letter-spacing: 0.04em;
   color: #ffffff;
@@ -1062,7 +1062,7 @@ h3 {
 
 .xp-org {
   margin: 0 0 16px;
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 12.5px;
   color: var(--purple);
 }
@@ -1135,7 +1135,7 @@ h3 {
   border-radius: 10px;
   border: 1px solid rgba(181, 195, 255, 0.2);
   background: rgba(15, 22, 42, 0.4);
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 13px;
   font-weight: 600;
   color: #ffffff;
@@ -1173,7 +1173,7 @@ h3 {
   justify-content: space-between;
   gap: 24px;
   color: #ffffff;
-  font-family: "Geist", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 11px;
 }
 
