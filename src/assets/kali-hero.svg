@@ -3,18 +3,18 @@
     <!-- base dark terminal gradient, echoing body's radial purple glow -->
     <radialGradient id="baseGlow" cx="82%" cy="8%" r="60%">
       <stop offset="0%" stop-color="#2a1a5e" stop-opacity="0.22"/>
-      <stop offset="45%" stop-color="#030612" stop-opacity="0"/>
+      <stop offset="45%" stop-color="#0d1428" stop-opacity="0"/>
     </radialGradient>
 
     <radialGradient id="cyanGlow" cx="18%" cy="92%" r="55%">
       <stop offset="0%" stop-color="#0a3a44" stop-opacity="0.18"/>
-      <stop offset="50%" stop-color="#030612" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#0d1428" stop-opacity="0"/>
     </radialGradient>
 
     <!-- vignette: keeps center clean/low-contrast, edges slightly more detailed -->
     <radialGradient id="vignette" cx="50%" cy="46%" r="62%">
-      <stop offset="0%" stop-color="#030612" stop-opacity="0"/>
-      <stop offset="62%" stop-color="#030612" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#0d1428" stop-opacity="0"/>
+      <stop offset="62%" stop-color="#0d1428" stop-opacity="0"/>
       <stop offset="100%" stop-color="#000103" stop-opacity="0.55"/>
     </radialGradient>
 
@@ -42,7 +42,7 @@
   </defs>
 
   <!-- base fill -->
-  <rect width="1920" height="1080" fill="#030612"/>
+  <rect width="1920" height="1080" fill="#0d1428"/>
 
   <!-- glows -->
   <rect width="1920" height="1080" fill="url(#baseGlow)"/>
