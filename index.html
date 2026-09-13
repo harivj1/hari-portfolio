@@ -8,6 +8,16 @@
       content="Hariharan Vijay Iswaran — Cybersecurity portfolio focused on offensive security, detection engineering, and security engineering."
     />
     <title>Hari | Cybersecurity Portfolio</title>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          document.documentElement.dataset.theme = t === "light" ? "light" : "dark";
+        } catch (e) {
+          document.documentElement.dataset.theme = "dark";
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
