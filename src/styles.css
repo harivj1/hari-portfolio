@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
 
 :root {
   font-family: "Open Sans", sans-serif;
@@ -8,30 +8,36 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 
-  --bg: #0d1428;
-  --bg-glow: rgba(71, 42, 170, 0.18);
-  --surface: rgba(2, 7, 19, 0.72);
-  --surface-2: rgba(15, 22, 42, 0.6);
-  --surface-3: rgba(18, 26, 48, 0.6);
-  --card-grad-a: rgba(13, 20, 43, 0.72);
-  --card-grad-b: rgba(6, 10, 24, 0.72);
+  /* portrait palette — blues sampled from the ascii portrait (kali-ascii.png) */
+  --bg: #000314;            /* portrait backdrop, darkened */
+  --bg-2: #00051c;
+  --bg-glow: rgba(77, 144, 231, 0.12);
+  --surface: rgba(0, 6, 30, 0.97);       /* #00061e deep shadow, darkened */
+  --surface-2: rgba(1, 16, 56, 0.9);     /* #011038 navy, darkened */
+  --surface-3: rgba(10, 67, 164, 0.3);   /* #0a43a4 cobalt */
+  --card-grad-a: rgba(1, 16, 56, 0.78);
+  --card-grad-b: rgba(0, 6, 30, 0.82);
 
   --text: #ffffff;
-  --text-2: #c9d4f4;
-  --text-3: #9ca9c9;
+  --text-2: #bcd3f6;
+  --text-3: #8fadde;
 
-  --border: rgba(112, 128, 255, 0.22);
-  --border-strong: rgba(112, 128, 255, 0.32);
-  --line: rgba(112, 128, 255, 0.22);
-  --name-stroke: rgba(224, 231, 255, 0.9);
+  --border: rgba(77, 144, 231, 0.24);    /* #4d90e7 highlight */
+  --border-strong: rgba(77, 144, 231, 0.45);
+  --line: rgba(77, 144, 231, 0.28);
+  --name-stroke: rgba(188, 211, 246, 0.9);
   --shadow: 0 50px 120px -40px rgba(0, 0, 0, 0.9);
 
-  --panel: rgba(18, 26, 48, 0.72);
-  /* primary accent — royal indigo (deep-blue family) */
+  --panel: rgba(1, 16, 56, 0.85);
   --muted: #ffffff;
-  --cyan: #3e63dd;
-  --blue: #6e8bff;
-  --purple: #a45cff;
+  --cyan: #4d90e7;          /* portrait highlight — primary accent */
+  --blue: #6ea6ee;          /* lighter highlight for prompts */
+  --periwinkle: #8fbaf2;
+  --royal: #0a43a4;         /* portrait cobalt */
+  --amber: #cf9b65;
+  --nebula: 77, 144, 231;
+  --btn-a: #0a43a4;
+  --btn-b: #01164c;
   --green: #63f58b;
 }
 
@@ -39,7 +45,7 @@
   color-scheme: light;
 
   --bg: #e4e7f1;
-  --bg-glow: rgba(85, 66, 170, 0.13);
+  --bg-glow: rgba(77, 144, 231, 0.13);
   --surface: #ffffff;
   --surface-2: rgba(255, 255, 255, 0.92);
   --surface-3: #d2d7e6;
@@ -61,13 +67,13 @@
   --muted: #191f3c;
   --cyan: #2545c0;
   --blue: #3450d6;
-  --purple: #7a2fd6;
+  --periwinkle: #3a5bb0;
+  --royal: #2c3f86;
+  --amber: #9a6228;
+  --nebula: 77, 129, 225;
+  --btn-a: #3e63dd;
+  --btn-b: #3a55c4;
   --green: #0f7a40;
-}
-
-:root[data-theme="light"] .hero-desktop,
-:root[data-theme="light"] .hero-overlay {
-  display: none;
 }
 
 :root[data-theme="light"] .term-ascii {
@@ -102,7 +108,7 @@
 }
 
 :root[data-theme="light"] .btn.primary {
-  box-shadow: 0 8px 22px -8px rgba(62, 99, 221, 0.5);
+  box-shadow: 0 8px 22px -8px rgba(77, 144, 231, 0.5);
 }
 
 :root[data-theme="light"] .project-card {
@@ -144,9 +150,7 @@ html {
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at 85% 10%, var(--bg-glow), transparent 28%),
-    var(--bg);
+  background: var(--bg);
   color: var(--text);
 }
 
@@ -162,23 +166,6 @@ img {
 .shell {
   width: min(880px, calc(100% - 40px));
   margin-inline: auto;
-}
-
-.hero-desktop {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-}
-
-.hero-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background:
-    linear-gradient(180deg, rgba(13, 20, 40, 0.35) 0%, rgba(13, 20, 40, 0.15) 22%, rgba(13, 20, 40, 0.25) 100%);
 }
 
 /* ---- tmux status bar (top navigation) ---- */
@@ -260,8 +247,8 @@ img {
 
 .sb-win.is-active {
   color: var(--text);
-  background: rgba(62, 99, 221, 0.18);
-  box-shadow: inset 0 0 0 1px rgba(62, 99, 221, 0.5);
+  background: rgba(77, 144, 231, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(77, 144, 231, 0.5);
 }
 
 .sb-win.is-active .sb-win-key {
@@ -288,7 +275,7 @@ img {
 
 .sb-theme:hover {
   color: var(--cyan);
-  border-color: rgba(62, 99, 221, 0.5);
+  border-color: rgba(77, 144, 231, 0.5);
 }
 
 
@@ -303,9 +290,7 @@ img {
   border-radius: 14px;
   background: var(--surface);
   backdrop-filter: blur(14px);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.03) inset,
-    var(--shadow);
+  box-shadow: var(--shadow);
   overflow: hidden;
   font-family: "Open Sans", sans-serif;
 }
@@ -410,13 +395,19 @@ h3 {
   right: 2%;
   width: min(420px, 44%);
   transform: translateY(-50%);
-  opacity: 0.58;
-  filter: brightness(0.8);
+  opacity: 0.92;
+  filter: brightness(1.05) contrast(1.08);
   z-index: 0;
   pointer-events: none;
   border-radius: 6px;
-  -webkit-mask-image: radial-gradient(120% 120% at 62% 50%, #000 34%, transparent 76%);
-  mask-image: radial-gradient(120% 120% at 62% 50%, #000 34%, transparent 76%);
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 72%, transparent 99%),
+    radial-gradient(120% 120% at 60% 48%, #000 52%, transparent 88%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, #000 72%, transparent 99%),
+    radial-gradient(120% 120% at 60% 48%, #000 52%, transparent 88%);
+  mask-composite: intersect;
 }
 
 .term-cmd {
@@ -466,16 +457,21 @@ h3 {
 
 .tmux-sep-rule {
   flex: 1;
+  position: relative;
   height: 1px;
   background: linear-gradient(
     90deg,
     transparent,
-    currentColor 10%,
-    currentColor 90%,
-    transparent
+    rgba(10, 67, 164, 0.7) 25%,
+    rgba(var(--nebula), 0.85) 75%,
+    #6ea6ee
   );
   opacity: 0.7;
   transition: opacity 220ms ease;
+}
+
+.tmux-sep-rule:last-child {
+  transform: scaleX(-1);
 }
 
 .tmux-sep-label {
@@ -507,10 +503,8 @@ h3 {
 
 .tmux-sep.is-active .tmux-sep-label {
   color: var(--text);
-  border-color: rgba(62, 99, 221, 0.6);
-  box-shadow:
-    0 0 26px -8px rgba(62, 99, 221, 0.55),
-    inset 0 0 0 1px rgba(62, 99, 221, 0.1);
+  border-color: rgba(77, 144, 231, 0.6);
+  box-shadow: inset 0 0 0 1px rgba(77, 144, 231, 0.1);
 }
 
 .tmux-sep.is-active .tmux-sep-n {
@@ -548,18 +542,18 @@ h3 {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--purple);
+  color: var(--periwinkle);
   font-weight: 600;
   letter-spacing: 0.02em;
 }
 
 .term-h svg {
-  color: var(--purple);
+  color: var(--periwinkle);
 }
 
 .term-rule {
   height: 0;
-  border-top: 1px dashed rgba(164, 92, 255, 0.42);
+  border-top: 1px dashed rgba(120, 141, 211, 0.42);
   margin: 4px 0 8px;
   max-width: 300px;
 }
@@ -640,7 +634,7 @@ h3 {
 
 .eyebrow-pin {
   flex-shrink: 0;
-  color: var(--purple);
+  color: var(--periwinkle);
 }
 
 .status-dot {
@@ -707,7 +701,7 @@ h3 {
 
 .hero-location svg {
   flex-shrink: 0;
-  color: var(--purple);
+  color: var(--periwinkle);
 }
 
 .btn {
@@ -724,14 +718,12 @@ h3 {
 }
 
 .btn.primary {
-  background: linear-gradient(135deg, #3e63dd, #3a55c4);
+  background: linear-gradient(135deg, var(--btn-a, #3e63dd), var(--btn-b, #3a55c4));
   color: #f4f7ff;
-  box-shadow: 0 0 32px rgba(62, 99, 221, 0.28);
 }
 
 .btn.primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 42px rgba(62, 99, 221, 0.42);
 }
 
 
@@ -901,7 +893,7 @@ h3 {
 
 .project-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(62, 99, 221, 0.6);
+  border-color: rgba(77, 144, 231, 0.6);
 }
 
 .project-body {
@@ -1004,7 +996,7 @@ h3 {
   padding: 2px 7px;
   border-radius: 4px;
   background: rgba(99, 245, 139, 0.12);
-  color: var(--green);
+  color: var(--amber);
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.03em;
@@ -1037,7 +1029,7 @@ h3 {
 }
 
 .topo2-node-accent {
-  border-color: rgba(62, 99, 221, 0.5);
+  border-color: rgba(77, 144, 231, 0.5);
 }
 
 .topo2-wordpress {
@@ -1048,8 +1040,8 @@ h3 {
 }
 
 .topo2-node-accent-purple {
-  border-color: rgba(164, 92, 255, 0.5);
-  background: linear-gradient(180deg, rgba(164, 92, 255, 0.12), transparent);
+  border-color: rgba(120, 141, 211, 0.5);
+  background: linear-gradient(180deg, rgba(120, 141, 211, 0.12), transparent);
 }
 
 .topo2-line {
@@ -1115,7 +1107,7 @@ h3 {
   white-space: nowrap;
   font-size: 9px;
   font-weight: 700;
-  color: var(--green);
+  color: var(--amber);
   background: var(--surface-3);
   opacity: 0;
   transition: opacity 300ms ease;
@@ -1127,7 +1119,7 @@ h3 {
 }
 
 .topo2-ldaps-label svg {
-  color: var(--green);
+  color: var(--amber);
   flex-shrink: 0;
 }
 
@@ -1223,7 +1215,7 @@ h3 {
 
 .waf-sev-list svg {
   flex-shrink: 0;
-  color: var(--green);
+  color: var(--amber);
 }
 
 .waf-sev-list b {
@@ -1354,7 +1346,7 @@ h3 {
 
 .cert-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(62, 99, 221, 0.6);
+  border-color: rgba(77, 144, 231, 0.6);
 }
 
 .cert-badge {
@@ -1381,7 +1373,7 @@ h3 {
   font-family: "Open Sans", sans-serif;
   font-size: 10px;
   letter-spacing: 0.1em;
-  color: var(--green);
+  color: var(--amber);
   text-transform: uppercase;
 }
 
@@ -1404,7 +1396,7 @@ h3 {
   margin-top: 6px !important;
   font-family: "Open Sans", sans-serif;
   font-size: 11px;
-  color: var(--purple);
+  color: var(--periwinkle);
 }
 
 .cert-id {
@@ -1433,7 +1425,7 @@ h3 {
 }
 
 .active-cert .cert-badge-icon {
-  color: var(--purple);
+  color: var(--periwinkle);
 }
 
 .skill-groups {
@@ -1517,7 +1509,7 @@ h3 {
 
 .skills > span:hover {
   transform: translateY(-3px);
-  border-color: rgba(62, 99, 221, 0.55);
+  border-color: rgba(77, 144, 231, 0.55);
 }
 
 .skill-icon {
@@ -1525,6 +1517,13 @@ h3 {
   width: 13px;
   height: 13px;
   color: var(--cyan);
+}
+
+/* Tux's detail is lost at 13px — give it more room than the other glyphs */
+.skill-icon[data-skill="Linux"] {
+  width: 19px;
+  height: 19px;
+  margin: -3px 0;
 }
 
 .skills > span.skill-logo-pill {
@@ -1536,6 +1535,12 @@ h3 {
   display: block;
   max-height: 21px;
   max-width: 92px;
+}
+
+/* the Windows wordmark is wide and fills the pill more than its neighbours */
+.skill-logo[alt="Windows"] {
+  max-height: 16px;
+  max-width: 72px;
 }
 
 /* themed logos (e.g. Nessus): swap the dark/light variant with the site
@@ -1607,7 +1612,7 @@ h3 {
   background: linear-gradient(
     180deg,
     var(--cyan),
-    var(--purple) 70%,
+    var(--periwinkle) 70%,
     transparent
   );
   opacity: 0.45;
@@ -1625,7 +1630,7 @@ h3 {
   height: 10px;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  background: linear-gradient(135deg, var(--cyan), var(--periwinkle));
   box-shadow: 0 0 0 4px var(--card-grad-a);
 }
 
@@ -1681,7 +1686,7 @@ h3 {
   margin: 0 0 16px;
   font-family: "Open Sans", sans-serif;
   font-size: 12.5px;
-  color: var(--purple);
+  color: var(--periwinkle);
 }
 
 .xp-type {
@@ -1798,18 +1803,18 @@ h3 {
 
 .contact-link svg {
   flex-shrink: 0;
-  color: var(--purple);
+  color: var(--periwinkle);
 }
 
 .contact-link:hover {
   transform: translateY(-2px);
-  border-color: rgba(62, 99, 221, 0.6);
+  border-color: rgba(77, 144, 231, 0.6);
   color: var(--text);
 }
 
 .contact-link-resume {
-  border-color: rgba(62, 99, 221, 0.5);
-  background: rgba(62, 99, 221, 0.16);
+  border-color: rgba(77, 144, 231, 0.5);
+  background: rgba(77, 144, 231, 0.16);
 }
 
 .contact-link-resume svg {
@@ -1889,7 +1894,7 @@ h3 {
   .term-ascii {
     width: min(280px, 46%);
     right: 0%;
-    opacity: 0.2;
+    opacity: 0.38;
   }
 }
 
@@ -2008,7 +2013,7 @@ h3 {
   .term-ascii {
     width: 74%;
     right: -14%;
-    opacity: 0.14;
+    opacity: 0.26;
   }
 
   .hero-actions .btn,
@@ -2046,5 +2051,415 @@ h3 {
   .topo2-line-ldaps,
   .topo2-ldaps-label {
     transition: none !important;
+  }
+}
+
+
+/* ==================================================================
+   Aesthetic polish (dark theme) — refined labels, chips, cards and
+   small details. No glows: only crisp lines and tonal blues.
+   ================================================================== */
+:root:not([data-theme="light"]) {
+  --hl: #4d90e7;               /* portrait highlight */
+  --cobalt: #0a43a4;           /* portrait cobalt */
+  accent-color: var(--hl);
+}
+
+/* text selection + scrollbar in the portrait blues */
+:root:not([data-theme="light"]) ::selection {
+  background: rgba(77, 144, 231, 0.35);
+  color: #ffffff;
+}
+
+:root:not([data-theme="light"]) {
+  scrollbar-color: #0a2a6e var(--bg);
+  scrollbar-width: thin;
+}
+
+/* title bar: a crisp cobalt → highlight hairline instead of a flat border */
+:root:not([data-theme="light"]) .term-bar {
+  border-bottom-color: transparent;
+}
+
+:root:not([data-theme="light"]) .term-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cobalt) 20%, var(--hl) 50%, var(--cobalt) 80%, transparent);
+  opacity: 0.8;
+}
+
+/* section labels: spaced small caps, no heavy box */
+:root:not([data-theme="light"]) .tmux-sep-label {
+  padding: 4px 6px;
+  border: none;
+  background: none;
+  box-shadow: none;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+:root:not([data-theme="light"]) .tmux-sep-br,
+:root:not([data-theme="light"]) .tmux-sep-colon {
+  color: var(--text-3);
+  font-weight: 400;
+}
+
+:root:not([data-theme="light"]) .tmux-sep-n,
+:root:not([data-theme="light"]) .tmux-sep.is-active .tmux-sep-n {
+  color: var(--hl);
+}
+
+:root:not([data-theme="light"]) .tmux-sep.is-active .tmux-sep-label {
+  border: none;
+  box-shadow: none;
+}
+
+/* skill + tag chips: even pills on a cobalt tint */
+:root:not([data-theme="light"]) .skills > span,
+:root:not([data-theme="light"]) .tags span {
+  min-height: 32px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border-color: rgba(77, 144, 231, 0.22);
+  background: linear-gradient(180deg, rgba(10, 67, 164, 0.22), rgba(2, 32, 109, 0.18));
+}
+
+:root:not([data-theme="light"]) .tags span {
+  min-height: 0;
+  padding: 4px 11px;
+}
+
+:root:not([data-theme="light"]) .skills > span:hover {
+  border-color: rgba(77, 144, 231, 0.6);
+}
+
+/* cards: soft rounded corners, a thin top highlight line, crisper hover */
+:root:not([data-theme="light"]) .project-card,
+:root:not([data-theme="light"]) .cert-card {
+  border-radius: 16px;
+  border-color: rgba(77, 144, 231, 0.18);
+  box-shadow: inset 0 1px 0 rgba(77, 144, 231, 0.16);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease;
+}
+
+:root:not([data-theme="light"]) .project-card:hover,
+:root:not([data-theme="light"]) .cert-card:hover {
+  border-color: rgba(77, 144, 231, 0.5);
+}
+
+/* experience timeline: hollow ring markers */
+:root:not([data-theme="light"]) .xp-t-dot {
+  width: 11px;
+  height: 11px;
+  background: var(--bg);
+  border: 2px solid var(--hl);
+  box-shadow: 0 0 0 4px var(--surface);
+}
+
+/* portrait: fade the bottom out fully so no edge line shows */
+.term-ascii {
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 58%, transparent 92%),
+    radial-gradient(120% 120% at 60% 48%, #000 52%, transparent 88%);
+  mask-image:
+    linear-gradient(to bottom, #000 58%, transparent 92%),
+    radial-gradient(120% 120% at 60% 48%, #000 52%, transparent 88%);
+}
+
+/* hero name: tighter, more editorial */
+:root:not([data-theme="light"]) .hero-name {
+  letter-spacing: -0.015em;
+}
+
+/* ---- display font for headings (body stays Open Sans) ---- */
+.term-body :is(h1, h2, h3),
+.term-output h1,
+.xp-heading h3,
+.tmux-sep-label {
+  font-family: "Space Grotesk", "Open Sans", sans-serif;
+}
+
+/* ---- experience: one clear hierarchy — titles and numbers lead ---- */
+:root:not([data-theme="light"]) .xp-org {
+  color: var(--text-2);
+}
+
+:root:not([data-theme="light"]) .xp-point-label {
+  color: var(--text);
+  font-weight: 600;
+}
+
+:root:not([data-theme="light"]) .xp-metric {
+  color: var(--hl);
+  font-weight: 600;
+}
+
+/* ==================================================================
+   Aesthetic polish, round 2
+   ================================================================== */
+
+/* hero subtitle: smaller, spaced, muted — lets the name lead */
+:root:not([data-theme="light"]) .term-output h2 {
+  margin-top: 10px;
+  font-size: clamp(13px, 1.3vw, 15px);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+/* hero social links: quiet pills that sharpen on hover */
+:root:not([data-theme="light"]) .socials {
+  gap: 10px;
+}
+
+:root:not([data-theme="light"]) .socials a {
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(77, 144, 231, 0.2);
+  background: rgba(10, 67, 164, 0.12);
+  transition:
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+:root:not([data-theme="light"]) .socials a:hover {
+  border-color: rgba(77, 144, 231, 0.6);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* availability dot: portrait blue with a slow expanding ring (no glow) */
+:root:not([data-theme="light"]) .status-dot {
+  position: relative;
+  background: var(--hl);
+  box-shadow: none;
+}
+
+:root:not([data-theme="light"]) .status-dot::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1.5px solid var(--hl);
+  animation: dot-ring 2.4s ease-out infinite;
+}
+
+@keyframes dot-ring {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+/* skill group headings: spaced caps with a short gradient rule */
+:root:not([data-theme="light"]) .skill-group-title {
+  font-family: "Space Grotesk", "Open Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  margin-bottom: 18px;
+}
+
+:root:not([data-theme="light"]) .skill-group-title::after {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 2px;
+  margin: 8px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--cobalt), var(--hl));
+}
+
+/* project titles: white, with a small blue running number */
+.project-grid {
+  counter-reset: proj;
+}
+
+.project-card {
+  counter-increment: proj;
+}
+
+:root:not([data-theme="light"]) .project-card h3 {
+  font-family: "Space Grotesk", "Open Sans", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.project-card h3::before {
+  content: counter(proj, decimal-leading-zero);
+  margin-right: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--hl, var(--cyan));
+  vertical-align: 2px;
+}
+
+/* home-lab diagram: DNSSEC chip in the blue palette */
+:root:not([data-theme="light"]) .topo2-chip {
+  background: rgba(77, 144, 231, 0.14);
+  color: var(--blue);
+}
+
+/* certification cards: calmer, tighter, blue check badge */
+:root:not([data-theme="light"]) .cert-card {
+  padding: 26px 22px 22px;
+}
+
+:root:not([data-theme="light"]) .cert-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(77, 144, 231, 0.3);
+  background: rgba(10, 67, 164, 0.18);
+  color: var(--blue);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+:root:not([data-theme="light"]) .cert-status::before {
+  content: "✓";
+  font-size: 10px;
+  letter-spacing: 0;
+}
+
+:root:not([data-theme="light"]) .cert-card h3 {
+  margin: 12px 0 2px;
+  font-family: "Space Grotesk", "Open Sans", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+:root:not([data-theme="light"]) .cert-sub {
+  min-height: 0;
+  color: var(--text-2);
+  font-size: 13px;
+}
+
+:root:not([data-theme="light"]) .cert-issuer {
+  margin-top: 14px !important;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+:root:not([data-theme="light"]) .cert-id {
+  margin-top: 4px !important;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: var(--text-3);
+}
+
+:root:not([data-theme="light"]) .cert-link {
+  margin-top: 14px;
+  color: var(--hl);
+}
+
+/* contact: bigger headline, icon tiles */
+:root:not([data-theme="light"]) .contact > h2 {
+  font-family: "Space Grotesk", "Open Sans", sans-serif;
+  font-size: clamp(28px, 3.4vw, 42px);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: #ffffff;
+}
+
+:root:not([data-theme="light"]) .contact > p {
+  color: var(--text-2);
+}
+
+:root:not([data-theme="light"]) .contact-ping {
+  color: var(--hl);
+}
+
+:root:not([data-theme="light"]) .contact-links {
+  gap: 12px;
+}
+
+:root:not([data-theme="light"]) .contact-link {
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  width: 116px;
+  padding: 18px 12px 16px;
+  border-radius: 14px;
+  border-color: rgba(77, 144, 231, 0.2);
+  background: linear-gradient(180deg, rgba(10, 67, 164, 0.18), rgba(2, 32, 109, 0.1));
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+
+:root:not([data-theme="light"]) .contact-link svg {
+  width: 22px;
+  height: 22px;
+  color: var(--hl);
+}
+
+:root:not([data-theme="light"]) .contact-link:hover {
+  border-color: rgba(77, 144, 231, 0.6);
+  transform: translateY(-3px);
+}
+
+/* footer: cobalt hairline + copyright */
+.footer {
+  position: relative;
+  margin-top: 12px;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cobalt, var(--line)) 20%, var(--hl, var(--line)) 50%, var(--cobalt, var(--line)) 80%, transparent);
+  opacity: 0.7;
+}
+
+.footer-copy {
+  color: var(--text-3);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+/* consistent rhythm between sections */
+:root:not([data-theme="light"]) .term-body > .section {
+  padding-top: 52px;
+  padding-bottom: 52px;
+}
+
+@media (max-width: 640px) {
+  :root:not([data-theme="light"]) .contact-link {
+    width: calc(50% - 6px);
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-dot::after {
+    animation: none;
+    display: none;
   }
 }

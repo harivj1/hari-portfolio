@@ -41,13 +41,14 @@ import {
   FaUserLock,
   FaWindows,
 } from "react-icons/fa6";
-import heroImage from "./assets/kali-hero.svg";
 import asciiPortrait from "./assets/kali-ascii.png";
 import logoNmap from "./assets/skills/nmap.png";
+import logoNmapDark from "./assets/skills/nmap-dark.png";
 import logoNessusDark from "./assets/skills/nessus-dark.png";
 import logoNessusLight from "./assets/skills/nessus-light.png";
 import logoSiemElk from "./assets/skills/siem-elk.png";
 import logoKaliLinux from "./assets/skills/kali-linux.png";
+import logoKaliLinuxDark from "./assets/skills/kali-linux-dark.png";
 import logoLogAnalysis from "./assets/skills/log-analysis.png";
 import logoIncidentInvestigation from "./assets/skills/incident-investigation.png";
 import logoThreatHunting from "./assets/skills/threat-hunting.png";
@@ -55,7 +56,9 @@ import logoBash from "./assets/skills/bash.png";
 import logoC from "./assets/skills/c.png";
 import logoJavascript from "./assets/skills/javascript.png";
 import logoWindows from "./assets/skills/windows.png";
+import logoWindowsDark from "./assets/skills/windows-dark.png";
 import logoActiveDirectory from "./assets/skills/active-directory.png";
+import logoActiveDirectoryDark from "./assets/skills/active-directory-dark.png";
 import logoSystemHardening from "./assets/skills/system-hardening.png";
 import logoIam from "./assets/skills/iam.png";
 import logoSso from "./assets/skills/sso.png";
@@ -99,6 +102,7 @@ const skillGroups = [
       "Nessus",
       "Burp Suite",
       "OWASP ZAP",
+      "|",
       "Metasploit",
       "Wireshark",
       "Kali Linux",
@@ -197,17 +201,13 @@ const skillIconColors: Record<string, string> = {
 // survive a light/dark theme swap any better than KQL's did), with the
 // typed label kept alongside like the concept icons below.
 const skillLogos: Record<string, string> = {
-  Nmap: logoNmap,
   "SIEM (ELK Stack)": logoSiemElk,
-  "Kali Linux": logoKaliLinux,
   "Log Analysis": logoLogAnalysis,
   "Incident Investigation & Triage": logoIncidentInvestigation,
   "Threat Detection & Hunting": logoThreatHunting,
   Bash: logoBash,
   C: logoC,
   JavaScript: logoJavascript,
-  Windows: logoWindows,
-  "Active Directory": logoActiveDirectory,
   "System Hardening": logoSystemHardening,
   IAM: logoIam,
   SSO: logoSso,
@@ -221,6 +221,12 @@ const skillLogos: Record<string, string> = {
 // alongside since the mark alone doesn't read as "Nessus".
 const themedSkillLogos: Record<string, { dark: string; light: string }> = {
   Nessus: { dark: logoNessusDark, light: logoNessusLight },
+  // the original blue artwork sinks into the navy dark-theme pills, so the
+  // dark variants are recolored into the site's blue-to-white palette
+  Nmap: { dark: logoNmapDark, light: logoNmap },
+  "Kali Linux": { dark: logoKaliLinuxDark, light: logoKaliLinux },
+  Windows: { dark: logoWindowsDark, light: logoWindows },
+  "Active Directory": { dark: logoActiveDirectoryDark, light: logoActiveDirectory },
 };
 
 // skills whose logo image already spells out the name (Nmap, ...) — showing
@@ -292,7 +298,7 @@ const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 // highlight quantitative tokens and a few key phrases within experience body copy.
 // String.split with a capturing group puts the matches at odd indices.
 const HIGHLIGHT_RE =
-  /(Tier \d+\/\d+|\d+\+|25(?= students)|compliance gaps|AWX\/Ansible|user\/admin access|support)/;
+  /(Tier \d+\/\d+|\d+\+|25(?= students)|compliance gaps|AWX\/Ansible|user\/admin access)/;
 const highlightMetrics = (text: string) =>
   text.split(HIGHLIGHT_RE).map((part, i) =>
     i % 2 === 1 ? (
@@ -526,6 +532,7 @@ function SkillGroup({ group }: { group: (typeof skillGroups)[number] }) {
               {Icon && (
                 <Icon
                   className="skill-icon"
+                  data-skill={item}
                   style={
                     skillIconColors[item]
                       ? { color: skillIconColors[item] }
@@ -787,11 +794,6 @@ function App() {
 
   return (
     <main>
-      <div
-        className="hero-desktop"
-        style={{ backgroundImage: `url(${heroImage})` }}
-      />
-      <div className="hero-overlay" />
 
       <header className="statusbar">
         <div className="sb-inner">
@@ -1195,6 +1197,9 @@ function App() {
               <span className="term-path">~</span>
               <span className="term-punc">$</span>{" "}
               <TypedCommand cmd='echo "Thanks for visiting"' />
+            </span>
+            <span className="footer-copy">
+              © {new Date().getFullYear()} Hariharan Vijay Iswaran
             </span>
           </footer>
         </div>
