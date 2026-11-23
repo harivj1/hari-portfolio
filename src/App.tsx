@@ -57,6 +57,7 @@ import logoSso from "./assets/skills/sso.png";
 const projects = [
   {
     title: "Enterprise Security Home Lab",
+    accent: "blue",
     description: [
       "Needed a realistic enterprise auth environment → automated DNS, LDAP, Kerberos, and web servers on LXD via Ansible → built idempotent, self-healing infrastructure.",
       "DNS/LDAP traffic was vulnerable to spoofing/interception → signed zones with DNSSEC and enforced LDAPS encryption → secured directory and authentication traffic end-to-end.",
@@ -66,6 +67,7 @@ const projects = [
   },
   {
     title: "ELK Detection Engineering",
+    accent: "green",
     description: [
       "Simulated enterprise network showed suspected credential misuse and lateral movement → built KQL/Kibana queries across auth and service logs → pinpointed compromised hosts, attack sources, and 14 affected machines.",
       "DNS logs lacked threat context → built a Python domain-scoring pipeline → flagged a DGA-based C2 domain missing from Top 1M lists.",
@@ -75,6 +77,7 @@ const projects = [
   },
   {
     title: "Web Application Security",
+    accent: "red",
     description: [
       "Vulnerable e-commerce app allowed unauthenticated DB access → exploited SQLi, stored/reflected/DOM XSS, and CSRF/clickjacking chains → achieved auth bypass, credential theft, and IDOR discovery.",
       "Java app contained 7 injection vulnerability classes → remediated with parameterized queries, context-aware encoding, and custom input validation → closed all 7 attack paths.",
@@ -88,6 +91,7 @@ const projects = [
 const skillGroups = [
   {
     title: "Security Tools",
+    accent: "red",
     items: [
       "Nmap",
       "Nessus",
@@ -101,6 +105,7 @@ const skillGroups = [
   },
   {
     title: "Detection & Monitoring",
+    accent: "green",
     items: [
       "SIEM (ELK Stack)",
       "KQL",
@@ -111,10 +116,12 @@ const skillGroups = [
   },
   {
     title: "Scripting & Programming",
+    accent: "blue",
     items: ["Python", "Bash", "C", "JavaScript", "|", "HTML5", "CSS3"],
   },
   {
     title: "Systems & Infrastructure",
+    accent: "silver",
     items: [
       "Linux",
       "Windows",
@@ -520,7 +527,7 @@ function TypedCommand({ cmd }: { cmd: string }) {
 function SkillGroup({ group }: { group: (typeof skillGroups)[number] }) {
   const [ref, inView] = useInView<HTMLDivElement>();
   return (
-    <div className="skill-group">
+    <div className={`skill-group accent-${group.accent}`}>
       <h3 className="skill-group-title">{group.title}</h3>
       <div
         className={"skills" + (inView ? " reveal-in" : "")}
@@ -736,17 +743,17 @@ function HomeLabArtifact() {
         className={"topology-diagram" + (inView ? " diagram-in-view" : "")}
         ref={ref}
       >
-        <div className="topo2-node topo2-dns">
+        <div className="topo2-node topo2-dns accent-blue">
           <span className="topo2-title">DNS</span>
           <span className="topo2-chip">DNSSEC</span>
         </div>
-        <div className="topo2-node topo2-kerberos">
+        <div className="topo2-node topo2-kerberos accent-red">
           <span className="topo2-title">Kerberos</span>
         </div>
-        <div className="topo2-node topo2-ldap topo2-node-accent">
+        <div className="topo2-node topo2-ldap accent-green">
           <span className="topo2-title">LDAP</span>
         </div>
-        <div className="topo2-node topo2-wordpress">
+        <div className="topo2-node topo2-wordpress accent-silver">
           <span className="topo2-title">WordPress</span>
           <span className="topo2-sub">TLS · SSO</span>
         </div>
@@ -962,6 +969,7 @@ function App() {
 
                 <div className="socials">
                   <a
+                    className="contact-link-github"
                     href="https://github.com/harivj1"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -970,6 +978,7 @@ function App() {
                     <span>github.com/harivj1</span>
                   </a>
                   <a
+                    className="contact-link-linkedin"
                     href="https://www.linkedin.com/in/hari-v-i"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -977,7 +986,7 @@ function App() {
                     <Linkedin size={18} />
                     <span>linkedin.com/in/hari-v-i</span>
                   </a>
-                  <a href="mailto:iswaranh@gmail.com">
+                  <a className="contact-link-gmail" href="mailto:iswaranh@gmail.com">
                     <Mail size={18} />
                     <span>iswaranh@gmail.com</span>
                   </a>
@@ -1144,7 +1153,10 @@ function App() {
               {projects.map((project, i) => {
                 const Artifact = projectArtifacts[i];
                 return (
-                  <article className="project-card" key={project.title}>
+                  <article
+                    className={`project-card accent-${project.accent}`}
+                    key={project.title}
+                  >
                     {Artifact && <Artifact />}
                     <div className="project-body">
                       <h3>{project.title}</h3>
@@ -1190,7 +1202,7 @@ function App() {
 
             <div className="contact-links">
               <a
-                className="contact-link"
+                className="contact-link contact-link-github"
                 href="https://github.com/harivj1"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -1199,7 +1211,7 @@ function App() {
                 GitHub
               </a>
               <a
-                className="contact-link"
+                className="contact-link contact-link-linkedin"
                 href="https://www.linkedin.com/in/hari-v-i"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -1207,7 +1219,7 @@ function App() {
                 <Linkedin size={18} />
                 LinkedIn
               </a>
-              <a className="contact-link" href="mailto:iswaranh@gmail.com">
+              <a className="contact-link contact-link-gmail" href="mailto:iswaranh@gmail.com">
                 <Mail size={18} />
                 Gmail
               </a>

@@ -9,14 +9,14 @@
   text-rendering: optimizeLegibility;
 
   /* calm navy palette: the original blue, toned down part-way */
-  --bg: #070d1e;
-  --bg-2: #09112a;
+  --bg: #080f24;
+  --bg-2: #0a1330;
   --bg-glow: rgba(84, 144, 223, 0.08);
-  --surface: rgba(8, 14, 32, 0.97);
-  --surface-2: rgba(14, 24, 52, 0.9);
-  --surface-3: rgba(48, 90, 170, 0.2);
-  --card-grad-a: rgba(14, 24, 52, 0.78);
-  --card-grad-b: rgba(8, 14, 32, 0.82);
+  --surface: rgba(10, 16, 38, 0.97);
+  --surface-2: rgba(16, 26, 57, 0.9);
+  --surface-3: rgba(49, 92, 174, 0.2);
+  --card-grad-a: rgba(16, 26, 57, 0.78);
+  --card-grad-b: rgba(10, 16, 38, 0.82);
 
   --text: #f3f6fb;
   --text-2: #c0d0ea;
@@ -28,7 +28,7 @@
   --name-stroke: rgba(195, 206, 222, 0.9);
   --shadow: 0 50px 120px -40px rgba(0, 0, 0, 0.7);
 
-  --panel: rgba(14, 24, 52, 0.85);
+  --panel: rgba(16, 26, 57, 0.85);
   --muted: #f3f6fb;
   --cyan: #5490df;          /* primary accent */
   --blue: #74a5e8;          /* lighter accent for links and labels */
@@ -36,8 +36,8 @@
   --royal: #1f4b9b;
   --amber: #cf9b65;
   --nebula: 84, 144, 223;
-  --btn-a: #1f55b0;
-  --btn-b: #163a7a;
+  --btn-a: #3a7be6;
+  --btn-b: #2559c4;
   --green: #63f58b;
 }
 
@@ -77,7 +77,17 @@
 }
 
 :root[data-theme="light"] .term-ascii {
-  opacity: 0.75;
+  opacity: 0.9;
+  /* the art's dark navy shading reads as a shadow on white: lift it */
+  filter: brightness(1.35) contrast(0.92) saturate(1.05);
+  /* longer, eased fade at the bottom so the jacket dissolves into the
+     white page instead of ending in a bright hazy band */
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 48%, rgba(0,0,0,0.55) 66%, rgba(0,0,0,0.18) 78%, transparent 88%),
+    radial-gradient(120% 120% at 60% 48%, #000 52%, transparent 88%);
+  mask-image:
+    linear-gradient(to bottom, #000 48%, rgba(0,0,0,0.55) 66%, rgba(0,0,0,0.18) 78%, transparent 88%),
+    radial-gradient(120% 120% at 60% 48%, #000 52%, transparent 88%);
 }
 
 :root[data-theme="light"] .terminal {
@@ -1018,10 +1028,6 @@ h3 {
   top: 35.8%;
   width: 23.9%;
   height: 30.5%;
-}
-
-.topo2-node-accent {
-  border-color: rgba(84, 144, 223, 0.5);
 }
 
 .topo2-wordpress {
@@ -2318,7 +2324,7 @@ h3 {
 /* availability dot: portrait blue with a slow expanding ring (no glow) */
 .status-dot {
   position: relative;
-  background: var(--hl);
+  background: var(--green);
   box-shadow: none;
 }
 
@@ -2327,7 +2333,7 @@ h3 {
   position: absolute;
   inset: -1px;
   border-radius: 50%;
-  border: 1.5px solid var(--hl);
+  border: 1.5px solid var(--green);
   animation: dot-ring 2.4s ease-out infinite;
 }
 
@@ -2576,9 +2582,14 @@ h3 {
    large .section h2 display size */
 .sec-head h2.tmux-sep-label {
   margin: 0;
-  font-size: 12.5px;
+  font-size: 17px;
+  font-weight: 700;
   line-height: 1.4;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.2em;
+  color: var(--heading, var(--text));
+  /* Space Grotesk tops out at 700; a hairline stroke in the same colour
+     thickens the strokes a little further */
+  -webkit-text-stroke: 0.45px currentColor;
 }
 
 .sec-head {
@@ -2588,4 +2599,140 @@ h3 {
 /* the name reads as one solid line */
 .term-output h1.hero-name {
   color: var(--text);
+}
+
+/* ---------- accent palette (from the contact tiles) ----------
+   blue = infrastructure & code, green = detection & done/active,
+   red = offensive security, silver = systems. Used only on small details. */
+:root {
+  --c-blue: #4a9be8;   --c-blue-rgb: 10, 102, 194;
+  --c-green: #63f58b;  --c-green-rgb: 99, 245, 139;
+  --c-red: #f2675a;    --c-red-rgb: 234, 67, 53;
+  --c-silver: #e6edf3; --c-silver-rgb: 201, 209, 217;
+}
+
+:root[data-theme="light"] {
+  --c-blue: #0a66c2;   --c-blue-rgb: 10, 102, 194;
+  --c-green: #0f7a40;  --c-green-rgb: 15, 122, 64;
+  --c-red: #c5221f;    --c-red-rgb: 197, 34, 31;
+  --c-silver: #24292f; --c-silver-rgb: 36, 41, 47;
+}
+
+.accent-blue   { --accent: var(--c-blue);   --accent-rgb: var(--c-blue-rgb); }
+.accent-green  { --accent: var(--c-green);  --accent-rgb: var(--c-green-rgb); }
+.accent-red    { --accent: var(--c-red);    --accent-rgb: var(--c-red-rgb); }
+.accent-silver { --accent: var(--c-silver); --accent-rgb: var(--c-silver-rgb); }
+
+/* ---------- contact tiles: one brand colour per platform ---------- */
+.contact-link-github   { --brand-rgb: var(--c-silver-rgb); --brand: var(--c-silver); }
+.contact-link-linkedin { --brand-rgb: var(--c-blue-rgb);   --brand: var(--c-blue); }
+.contact-link-gmail    { --brand-rgb: var(--c-red-rgb);    --brand: var(--c-red); }
+.contact-links .contact-link-resume   { --brand-rgb: var(--c-green-rgb);  --brand: var(--c-green); }
+
+.contact-links .contact-link:is(
+    .contact-link-github,
+    .contact-link-linkedin,
+    .contact-link-gmail,
+    .contact-link-resume
+  ) {
+  border-color: rgba(var(--brand-rgb), 0.35);
+  background: linear-gradient(180deg, rgba(var(--brand-rgb), 0.16), rgba(var(--brand-rgb), 0.05));
+}
+
+.contact-links .contact-link:is(
+    .contact-link-github,
+    .contact-link-linkedin,
+    .contact-link-gmail,
+    .contact-link-resume
+  ) svg {
+  color: var(--brand);
+}
+
+.contact-links .contact-link:is(
+    .contact-link-github,
+    .contact-link-linkedin,
+    .contact-link-gmail,
+    .contact-link-resume
+  ):hover {
+  border-color: rgba(var(--brand-rgb), 0.7);
+  background: linear-gradient(180deg, rgba(var(--brand-rgb), 0.24), rgba(var(--brand-rgb), 0.08));
+}
+
+/* ---------- accents in the other sections ---------- */
+/* skills: each group's underline and pill hover take its colour */
+.skill-group[class*="accent-"] .skill-group-title::after {
+  background: var(--accent);
+}
+
+.skill-group[class*="accent-"] .skills > span:hover {
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+/* projects: coloured running number, artifact label, top edge and hover */
+.project-card[class*="accent-"] h3::before {
+  color: var(--accent);
+}
+
+.project-card[class*="accent-"] .proj-artifact-label {
+  color: var(--accent);
+}
+
+.project-card[class*="accent-"] {
+  box-shadow: inset 0 2px 0 rgba(var(--accent-rgb), 0.55);
+}
+
+:root[data-theme="light"] .project-card[class*="accent-"] {
+  box-shadow:
+    inset 0 2px 0 rgba(var(--accent-rgb), 0.7),
+    0 6px 20px -12px rgba(26, 35, 72, 0.28);
+}
+
+.project-card[class*="accent-"]:hover {
+  border-color: rgba(var(--accent-rgb), 0.5);
+}
+
+/* certifications: "completed" reads as done, in green */
+.cert-status {
+  border-color: rgba(var(--c-green-rgb), 0.35);
+  background: rgba(var(--c-green-rgb), 0.1);
+  color: var(--c-green);
+}
+
+/* hero social links: same platform colours as the contact tiles */
+.socials a[class^="contact-link-"] {
+  border-color: rgba(var(--brand-rgb), 0.35);
+  background: rgba(var(--brand-rgb), 0.1);
+}
+
+.socials a[class^="contact-link-"] svg {
+  color: var(--brand);
+}
+
+.socials a[class^="contact-link-"]:hover {
+  border-color: rgba(var(--brand-rgb), 0.7);
+  background: rgba(var(--brand-rgb), 0.18);
+}
+
+/* home-lab diagram: each service in its own accent colour, like the contact
+   tiles — DNS blue, Kerberos red, LDAP green, WordPress silver */
+.topo2-node[class*="accent-"] {
+  border-color: rgba(var(--accent-rgb), 0.45);
+  background:
+    linear-gradient(180deg, rgba(var(--accent-rgb), 0.16), rgba(var(--accent-rgb), 0.05)),
+    var(--surface);
+}
+
+.topo2-node[class*="accent-"] .topo2-title {
+  color: var(--accent);
+}
+
+.topo2-node[class*="accent-"] .topo2-chip {
+  background: rgba(var(--accent-rgb), 0.16);
+  color: var(--accent);
+}
+
+/* the LDAPS link belongs to LDAP, so it shares LDAP's green */
+.topo2-ldaps-label {
+  color: var(--c-green);
+  background: rgba(var(--c-green-rgb), 0.12);
 }
