@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Check,
   ExternalLink,
@@ -40,25 +40,16 @@ import {
   FaTriangleExclamation,
   FaUserLock,
   FaWindows,
+  FaNetworkWired,
 } from "react-icons/fa6";
 import asciiPortrait from "./assets/kali-ascii.png";
-import logoNmap from "./assets/skills/nmap.png";
-import logoNmapDark from "./assets/skills/nmap-dark.png";
 import logoNessusDark from "./assets/skills/nessus-dark.png";
 import logoNessusLight from "./assets/skills/nessus-light.png";
 import logoSiemElk from "./assets/skills/siem-elk.png";
-import logoKaliLinux from "./assets/skills/kali-linux.png";
-import logoKaliLinuxDark from "./assets/skills/kali-linux-dark.png";
 import logoLogAnalysis from "./assets/skills/log-analysis.png";
 import logoIncidentInvestigation from "./assets/skills/incident-investigation.png";
 import logoThreatHunting from "./assets/skills/threat-hunting.png";
 import logoBash from "./assets/skills/bash.png";
-import logoC from "./assets/skills/c.png";
-import logoJavascript from "./assets/skills/javascript.png";
-import logoWindows from "./assets/skills/windows.png";
-import logoWindowsDark from "./assets/skills/windows-dark.png";
-import logoActiveDirectory from "./assets/skills/active-directory.png";
-import logoActiveDirectoryDark from "./assets/skills/active-directory-dark.png";
 import logoSystemHardening from "./assets/skills/system-hardening.png";
 import logoIam from "./assets/skills/iam.png";
 import logoSso from "./assets/skills/sso.png";
@@ -140,6 +131,7 @@ const skillGroups = [
 // gets a concept icon that matches the skill.
 const skillIcons: Record<string, IconType> = {
   // Security Tools
+  Nmap: FaNetworkWired,
   Nessus: FaMagnifyingGlassChart,
   "Burp Suite": SiBurpsuite,
   "OWASP ZAP": SiOwasp,
@@ -206,8 +198,6 @@ const skillLogos: Record<string, string> = {
   "Incident Investigation & Triage": logoIncidentInvestigation,
   "Threat Detection & Hunting": logoThreatHunting,
   Bash: logoBash,
-  C: logoC,
-  JavaScript: logoJavascript,
   "System Hardening": logoSystemHardening,
   IAM: logoIam,
   SSO: logoSso,
@@ -223,32 +213,60 @@ const themedSkillLogos: Record<string, { dark: string; light: string }> = {
   Nessus: { dark: logoNessusDark, light: logoNessusLight },
   // the original blue artwork sinks into the navy dark-theme pills, so the
   // dark variants are recolored into the site's blue-to-white palette
-  Nmap: { dark: logoNmapDark, light: logoNmap },
-  "Kali Linux": { dark: logoKaliLinuxDark, light: logoKaliLinux },
-  Windows: { dark: logoWindowsDark, light: logoWindows },
-  "Active Directory": { dark: logoActiveDirectoryDark, light: logoActiveDirectory },
 };
 
-// skills whose logo image already spells out the name (Nmap, ...) — showing
-// the typed label too would just repeat it.
-const skillLogoHidesLabel = new Set([
-  "Nmap",
-  "Kali Linux",
-  "C",
-  "JavaScript",
-  "Windows",
-  "Active Directory",
-]);
+type ExperienceEntry = {
+  role: string;
+  org: string;
+  orgShort?: string; // compact name for the tab list
+  type: string;
+  period: string;
+  duration?: string; // omitted for current roles: computed from the start date
+  city: string;
+  site?: string;
+  current?: boolean;
+  headline: string; // the one win a skimming reader should take away
+  tags: string[];
+  points: { label: string; text: string }[];
+};
 
-const experience = [
+
+const experience: ExperienceEntry[] = [
+  {
+    role: "Security Engineer",
+    org: "Holiday Channel",
+    type: "Internship",
+    period: "Sep 2026 — Present",
+    city: "Colorado, United States",
+    current: true,
+    headline: "Found malware during a code review and drove it to a fix alongside the developers.",
+    tags: ["SAST", "Threat Modelling", "Penetration Testing", "Vulnerability Management"],
+    points: [
+      {
+        label: "Secure Code Review",
+        text: "Reviewed application code with SAST, threat modelling, and penetration testing — surfaced vulnerabilities and tracked them through vulnerability management.",
+      },
+      {
+        label: "Malware Discovery & Remediation",
+        text: "Found malware during a code review, escalated it, and provided mitigation — worked alongside developers through remediation until it was fixed.",
+      },
+      {
+        label: "Security Coordination",
+        text: "Ran security meetings twice a week and tracked every team member's tasks — kept findings and fixes moving to closure.",
+      },
+    ],
+  },
   {
     role: "Technical Linux Specialist",
     org: "University of North Carolina at Charlotte",
+    orgShort: "UNC Charlotte",
     type: "Part-time",
     period: "Oct 2025 — May 2026",
     duration: "8 mos",
     city: "Charlotte, North Carolina, United States",
     site: "On-site",
+    headline: "Remediated 100+ end-of-life Linux workstations and closed unmanaged-endpoint exposure fleet-wide.",
+    tags: ["Linux", "Endpoint Hardening", "Grouper", "Log Analysis"],
     points: [
       {
         label: "Endpoint Security",
@@ -275,11 +293,14 @@ const experience = [
   {
     role: "Graduate Instructional Assistant",
     org: "University of North Carolina at Charlotte",
+    orgShort: "UNC Charlotte",
     type: "Part-time",
     period: "Jan 2025 — May 2025",
     duration: "5 mos",
     city: "Charlotte, North Carolina, United States",
     site: "On-site",
+    headline: "Supported 25 students weekly with Python and cryptography troubleshooting.",
+    tags: ["Python", "Cryptography", "Canvas", "Gradescope"],
     points: [
       {
         label: "Technical Troubleshooting",
@@ -292,6 +313,19 @@ const experience = [
     ],
   },
 ];
+
+// "Sep 2026" → months elapsed up to today, counted inclusively like LinkedIn
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const durationSince = (start: string) => {
+  const [mon, year] = start.split(" ");
+  const now = new Date();
+  const months =
+    (now.getFullYear() - Number(year)) * 12 +
+    (now.getMonth() - MONTHS.indexOf(mon)) + 1;
+  if (months < 12) return `${months} mo${months === 1 ? "" : "s"}`;
+  const y = Math.floor(months / 12), m = months % 12;
+  return `${y} yr${y === 1 ? "" : "s"}` + (m ? ` ${m} mo${m === 1 ? "" : "s"}` : "");
+};
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
@@ -346,13 +380,13 @@ type WindowDef = { id: string; key: string; label: string };
 
 // tmux window list — index 0 is the home window.
 const windows: WindowDef[] = [
-  { id: "home", key: "0", label: "home" },
-  { id: "about", key: "1", label: "about" },
-  { id: "skills", key: "2", label: "skills" },
-  { id: "experience", key: "3", label: "experience" },
-  { id: "certifications", key: "4", label: "certs" },
-  { id: "projects", key: "5", label: "projects" },
-  { id: "contact", key: "6", label: "contact" },
+  { id: "home", key: "0", label: "Home" },
+  { id: "about", key: "1", label: "About" },
+  { id: "skills", key: "2", label: "Skills" },
+  { id: "experience", key: "3", label: "Experience" },
+  { id: "certifications", key: "4", label: "Certifications" },
+  { id: "projects", key: "5", label: "Projects" },
+  { id: "contact", key: "6", label: "Contact" },
 ];
 
 function useActiveWindow() {
@@ -509,9 +543,7 @@ function SkillGroup({ group }: { group: (typeof skillGroups)[number] }) {
                   className="skill-logo skill-logo-light-only"
                   alt={item}
                 />
-                {!skillLogoHidesLabel.has(item) && (
-                  <span className="skill-logo-label">{item}</span>
-                )}
+                <span className="skill-logo-label">{item}</span>
               </span>
             );
           }
@@ -520,9 +552,7 @@ function SkillGroup({ group }: { group: (typeof skillGroups)[number] }) {
             return (
               <span className="skill-logo-pill" key={item}>
                 <img src={logo} className="skill-logo" alt={item} />
-                {!skillLogoHidesLabel.has(item) && (
-                  <span className="skill-logo-label">{item}</span>
-                )}
+                <span className="skill-logo-label">{item}</span>
               </span>
             );
           }
@@ -552,43 +582,104 @@ function SkillGroup({ group }: { group: (typeof skillGroups)[number] }) {
 
 // one job's timeline entry — its bullet points stagger in together once the
 // entry scrolls into view.
-function ExperienceRole({
-  job,
-  isLast,
-}: {
-  job: (typeof experience)[number];
-  isLast: boolean;
-}) {
+// experience: roles listed down the left like terminal windows, the selected
+// role's details on the right. Arrow keys move between tabs (WAI-ARIA tabs).
+function ExperienceTabs({ jobs }: { jobs: ExperienceEntry[] }) {
+  const [selected, setSelected] = useState(0);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const job = jobs[selected];
   const [start, end] = job.period.split(" — ");
-  const [ref, inView] = useInView<HTMLUListElement>();
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    const keys: Record<string, number> = {
+      ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1,
+    };
+    let next: number | undefined;
+    if (e.key in keys) next = (selected + keys[e.key] + jobs.length) % jobs.length;
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = jobs.length - 1;
+    if (next === undefined) return;
+    e.preventDefault();
+    setSelected(next);
+    tabRefs.current[next]?.focus();
+  };
+
   return (
-    <Fragment>
-      <div className="xp-t-date">
-        <span className="xp-t-date-start">{start}</span>
-        <span className="xp-t-date-end">{end}</span>
-      </div>
+    <div className="xp-tabs">
       <div
-        className={"xp-t-rail" + (isLast ? " is-last" : "")}
-        aria-hidden="true"
+        className="xp-tablist"
+        role="tablist"
+        aria-label="Roles"
+        aria-orientation="vertical"
+        onKeyDown={onKeyDown}
       >
-        <span className="xp-t-dot" />
+        {jobs.map((j, i) => (
+          <button
+            key={j.role + j.period}
+            ref={(el) => {
+              tabRefs.current[i] = el;
+            }}
+            type="button"
+            role="tab"
+            id={`xp-tab-${i}`}
+            aria-selected={i === selected}
+            aria-controls="xp-tabpanel"
+            tabIndex={i === selected ? 0 : -1}
+            className={"xp-tab" + (i === selected ? " is-active" : "")}
+            onClick={() => setSelected(i)}
+          >
+            <span className="xp-tab-org">
+              {j.orgShort ?? j.org}
+              {j.current && <span className="xp-tab-live" aria-label="current" />}
+            </span>
+            <span className="xp-tab-role">{j.role}</span>
+            <span className="xp-tab-period">{j.period.replace(" — ", " – ")}</span>
+          </button>
+        ))}
       </div>
-      <div className="xp-t-content">
+
+      <div
+        className="xp-tabpanel"
+        role="tabpanel"
+        id="xp-tabpanel"
+        aria-labelledby={`xp-tab-${selected}`}
+        key={selected}
+      >
         <div className="xp-heading">
-          <h3>{job.role}</h3>
-          <span className="xp-duration">{job.duration}</span>
+          <h3>
+            {job.role}
+            {job.current && <span className="xp-current">Current</span>}
+          </h3>
+          <span className="xp-duration">
+            {job.duration ?? durationSince(start)}
+          </span>
         </div>
         <p className="xp-org">
-          {job.org} ·{" "}
+          {job.org}
           <span className="xp-org-extra">
+            <span className="xp-dot">·</span>
             <span className="xp-type">{job.type}</span>
             <span className="xp-dot">·</span>
             <span className="xp-loc">{job.city}</span>
+            {job.site && (
+              <>
+                <span className="xp-dot">·</span>
+                <span className="xp-loc">{job.site}</span>
+              </>
+            )}
             <span className="xp-dot">·</span>
-            <span className="xp-loc">{job.site}</span>
+            <span className="xp-loc">
+              {start} – {end}
+            </span>
           </span>
         </p>
-        <ul className={"xp-points" + (inView ? " reveal-in" : "")} ref={ref}>
+        <p className="xp-headline">{highlightMetrics(job.headline)}</p>
+        <div className="tags xp-tags">
+          {job.tags.map((tag) => (
+            <span key={tag}>{tag}</span>
+          ))}
+        </div>
+        <ul className="xp-points reveal-in">
           {job.points.map((point) => (
             <li key={point.label}>
               <span className="xp-point-label">{point.label}:</span>{" "}
@@ -597,43 +688,20 @@ function ExperienceRole({
           ))}
         </ul>
       </div>
-    </Fragment>
+    </div>
   );
 }
 
-function SectionHead({
-  n,
-  name,
-  cmd,
-  active,
-}: {
-  n: string;
-  name: string;
-  cmd: string;
-  active: boolean;
-}) {
+function SectionHead({ name, active }: { name: string; active: boolean }) {
   return (
     <div className="sec-head">
-      <div
-        className={"tmux-sep" + (active ? " is-active" : "")}
-        aria-hidden="true"
-      >
-        <span className="tmux-sep-rule" />
-        <span className="tmux-sep-label">
-          <span className="tmux-sep-br">[</span>&nbsp;
-          <span className="tmux-sep-n">{n}</span>
-          <span className="tmux-sep-colon">:</span>
-          <span className="tmux-sep-name">{name}</span>&nbsp;
-          <span className="tmux-sep-br">]</span>
-        </span>
-        <span className="tmux-sep-rule" />
+      <div className={"tmux-sep" + (active ? " is-active" : "")}>
+        <span className="tmux-sep-rule" aria-hidden="true" />
+        <h2 className="tmux-sep-label">
+          <span className="tmux-sep-name">{name}</span>
+        </h2>
+        <span className="tmux-sep-rule" aria-hidden="true" />
       </div>
-      <p className="section-cmd">
-        <span className="term-user">hari@kali</span>
-        <span className="term-punc">:</span>
-        <span className="term-path">~</span>
-        <span className="term-punc">$</span> <TypedCommand cmd={cmd} />
-      </p>
     </div>
   );
 }
@@ -678,7 +746,7 @@ function HomeLabArtifact() {
         <div className="topo2-node topo2-ldap topo2-node-accent">
           <span className="topo2-title">LDAP</span>
         </div>
-        <div className="topo2-node topo2-wordpress topo2-node-accent-purple">
+        <div className="topo2-node topo2-wordpress">
           <span className="topo2-title">WordPress</span>
           <span className="topo2-sub">TLS · SSO</span>
         </div>
@@ -810,8 +878,6 @@ function App() {
                 className={"sb-win" + (active === w.id ? " is-active" : "")}
                 aria-current={active === w.id ? "true" : undefined}
               >
-                <span className="sb-win-key">{w.key}</span>
-                <span className="sb-win-colon">:</span>
                 <span className="sb-win-label">{w.label}</span>
               </a>
             ))}
@@ -844,8 +910,6 @@ function App() {
 
         <div className="term-body">
           <div id="home" className="term-output">
-            <p className="tmux-tag">[ 0:home ]</p>
-
             <p className="term-cmd">
               <span className="term-user">hari@kali</span>
               <span className="term-punc">:</span>
@@ -862,10 +926,7 @@ function App() {
               />
               <div className="term-output-main">
                 <h1 className="hero-name">
-                  <span className="nm-w">Hari</span>
-                  <span className="nm-o">haran</span>{" "}
-                  <span className="nm-w">Vijay</span>{" "}
-                  <span className="nm-o">Iswaran</span>
+                  Hariharan Vijay Iswaran
                 </h1>
 
                 <h2>Security Engineer · Offensive Security</h2>
@@ -873,16 +934,8 @@ function App() {
                 <p className="eyebrow">
                   <span className="eyebrow-part">
                     <MapPin className="eyebrow-pin" size={12} strokeWidth={2.5} />
-                    Currently In Tempe, Arizona
+                    Currently in Tempe, Arizona
                   </span>
-                </p>
-
-                <p className="term-cmd term-cmd-next">
-                  <span className="term-user">hari@kali</span>
-                  <span className="term-punc">:</span>
-                  <span className="term-path">~</span>
-                  <span className="term-punc">$</span>{" "}
-                  <TypedCommand cmd="cat ~/about.txt" />
                 </p>
 
                 <p className="intro">
@@ -903,7 +956,7 @@ function App() {
                   </a>
                   <span className="hero-location">
                     <span className="status-dot" />
-                    Available For Security Roles
+                    Open to security roles
                   </span>
                 </div>
 
@@ -939,9 +992,7 @@ function App() {
             className={"section shell" + (aboutInView ? " reveal-in" : "")}
           >
             <SectionHead
-              n="01"
               name="about"
-              cmd="cat ~/about.md"
               active={active === "about"}
             />
             <div className="about-stack">
@@ -1003,9 +1054,7 @@ function App() {
             className={"section shell" + (skillsInView ? " reveal-in" : "")}
           >
             <SectionHead
-              n="02"
               name="skills"
-              cmd="ls ~/toolkit/"
               active={active === "skills"}
             />
             <div className="skill-groups">
@@ -1023,20 +1072,10 @@ function App() {
             }
           >
             <SectionHead
-              n="03"
               name="experience"
-              cmd="cat ~/experience.log"
               active={active === "experience"}
             />
-            <div className="xp-timeline">
-              {experience.map((job, i) => (
-                <ExperienceRole
-                  job={job}
-                  isLast={i === experience.length - 1}
-                  key={job.role + job.period}
-                />
-              ))}
-            </div>
+            <ExperienceTabs jobs={experience} />
           </section>
 
           <section
@@ -1045,9 +1084,7 @@ function App() {
             className={"section shell" + (certsInView ? " reveal-in" : "")}
           >
             <SectionHead
-              n="04"
               name="certifications"
-              cmd="ls -l ~/certs/"
               active={active === "certifications"}
             />
             <div className="cert-grid">
@@ -1100,9 +1137,7 @@ function App() {
             className={"section shell" + (projectsInView ? " reveal-in" : "")}
           >
             <SectionHead
-              n="05"
               name="projects"
-              cmd="git log --oneline academic-projects/"
               active={active === "projects"}
             />
             <div className="project-grid">
@@ -1142,16 +1177,14 @@ function App() {
             }
           >
             <SectionHead
-              n="06"
               name="contact"
-              cmd="./contact.sh"
               active={active === "contact"}
             />
             <h2>Let's build something secure.</h2>
             <p>
               Interesting problem, open role, or just want to talk security?{" "}
               <span style={{ whiteSpace: "nowrap" }}>
-                <span className="contact-ping">Ping me</span> — links below.
+                <span className="contact-ping">Get in touch</span> — links below.
               </span>
             </p>
 
