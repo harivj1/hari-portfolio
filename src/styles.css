@@ -9,14 +9,14 @@
   text-rendering: optimizeLegibility;
 
   /* calm navy palette: the original blue, toned down part-way */
-  --bg: #081026;
-  --bg-2: #0a1432;
+  --bg: #080f24;
+  --bg-2: #0a1330;
   --bg-glow: rgba(84, 144, 223, 0.08);
-  --surface: rgba(10, 17, 40, 0.97);
-  --surface-2: rgba(16, 27, 59, 0.9);
-  --surface-3: rgba(49, 93, 175, 0.2);
-  --card-grad-a: rgba(16, 27, 59, 0.78);
-  --card-grad-b: rgba(10, 17, 40, 0.82);
+  --surface: rgba(10, 16, 38, 0.97);
+  --surface-2: rgba(16, 26, 57, 0.9);
+  --surface-3: rgba(49, 92, 174, 0.2);
+  --card-grad-a: rgba(16, 26, 57, 0.78);
+  --card-grad-b: rgba(10, 16, 38, 0.82);
 
   --text: #f3f6fb;
   --text-2: #c0d0ea;
@@ -28,7 +28,7 @@
   --name-stroke: rgba(195, 206, 222, 0.9);
   --shadow: 0 50px 120px -40px rgba(0, 0, 0, 0.7);
 
-  --panel: rgba(16, 27, 59, 0.85);
+  --panel: rgba(16, 26, 57, 0.85);
   --muted: #f3f6fb;
   --cyan: #5490df;          /* primary accent */
   --blue: #74a5e8;          /* lighter accent for links and labels */
