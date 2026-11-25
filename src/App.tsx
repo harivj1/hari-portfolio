@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import {
   Check,
+  ChevronDown,
   ExternalLink,
   FileText,
   Github,
@@ -54,7 +55,35 @@ import logoSystemHardening from "./assets/skills/system-hardening.png";
 import logoIam from "./assets/skills/iam.png";
 import logoSso from "./assets/skills/sso.png";
 
-const projects = [
+// one typed list drives both tiers: flip `featured` to promote or demote a
+// project. `summary` is the one-liner shown on compact cards; `caseStudySlug`
+// adds a "Read case study" link when present.
+type Project = {
+  title: string;
+  accent: "blue" | "green" | "red" | "silver";
+  description: string[];
+  tags: string[];
+  featured: boolean;
+  summary?: string;
+  caseStudySlug?: string;
+  artifact: () => JSX.Element;
+};
+
+const projects: Project[] = [
+  {
+    title: "Web Application Security",
+    accent: "red",
+    description: [
+      "Vulnerable e-commerce app allowed unauthenticated DB access → exploited SQLi, stored/reflected/DOM XSS, and CSRF/clickjacking chains → achieved auth bypass, credential theft, and IDOR discovery.",
+      "Java app contained 7 injection vulnerability classes → remediated with parameterized queries, context-aware encoding, and custom input validation → closed all 7 attack paths.",
+      "Unvalidated URLs and broken access control exposed internal resources → found via Burp/ZAP tampering, fixed with allow-listing and session-based identity checks → documented report.",
+    ],
+    tags: ["Burp Suite", "SQLMap", "Web Security"],
+    featured: false,
+    summary:
+      "Exploited SQLi, XSS, CSRF/clickjacking and IDOR in a vulnerable e-commerce app, then remediated 7 injection vulnerability classes in a Java app.",
+    artifact: WebAppArtifact,
+  },
   {
     title: "Enterprise Security Home Lab",
     accent: "blue",
@@ -64,6 +93,10 @@ const projects = [
       "Needed centralized app-level login → deployed WordPress over TLS integrated with LDAPS → enabled directory-based SSO.",
     ],
     tags: ["Linux", "Ansible", "LDAP", "Kerberos"],
+    featured: false,
+    summary:
+      "Automated DNS, LDAP, Kerberos and web servers on LXD via Ansible, secured with DNSSEC and LDAPS and fronted by directory-based SSO.",
+    artifact: HomeLabArtifact,
   },
   {
     title: "ELK Detection Engineering",
@@ -74,16 +107,72 @@ const projects = [
       "NetFlow and SSL logs showed no built-in threat signals → enriched data (IP/ASN tagging) and ran Kibana long-tail analysis in Elastic SIEM → detected exfiltration, beaconing, and spoofed CAs tied to 6 IPs.",
     ],
     tags: ["ELK", "KQL", "Detection", "Threat Hunting"],
+    featured: false,
+    summary:
+      "Hunted credential misuse, lateral movement, DGA-based C2, exfiltration and beaconing in Elastic SIEM, tracing them to 14 affected machines and 6 IPs.",
+    artifact: ElkArtifact,
   },
   {
-    title: "Web Application Security",
-    accent: "red",
+    title: "Malware Analysis: From Disassembly to Detection",
+    accent: "silver",
     description: [
-      "Vulnerable e-commerce app allowed unauthenticated DB access → exploited SQLi, stored/reflected/DOM XSS, and CSRF/clickjacking chains → achieved auth bypass, credential theft, and IDOR discovery.",
-      "Java app contained 7 injection vulnerability classes → remediated with parameterized queries, context-aware encoding, and custom input validation → closed all 7 attack paths.",
-      "Unvalidated URLs and broken access control exposed internal resources → found via Burp/ZAP tampering, fixed with allow-listing and session-based identity checks → documented report.",
+      "Sample showed no visible runtime behavior → disassembled it in IDA Pro and found a custom XOR routine plus resource-extraction logic (FindResourceA, LoadResource, VirtualAlloc) → revealed a hidden executable unpacked at runtime.",
+      "Suspected keylogging → attached OllyDbg to the malware's svchost.exe and traced live keystrokes → confirmed capture through repeated WriteFile calls.",
+      "Needed persistence and IOCs → used Process Explorer, a Regshot diff and strings analysis → found DLL injection, the Irmon service, 31 registry/file changes, and a hardcoded C2-style domain with cmd.exe /c artifacts.",
     ],
-    tags: ["Burp Suite", "SQLMap", "Web Security"],
+    tags: [
+      "IDA Pro",
+      "OllyDbg",
+      "Process Explorer",
+      "Reverse Engineering",
+      "IOC Extraction",
+    ],
+    featured: false,
+    summary:
+      "Reverse engineered a packed sample in IDA Pro and OllyDbg, uncovering XOR unpacking, svchost.exe DLL injection, keylogging, the Irmon service and a hardcoded C2-style domain.",
+    artifact: MalwareArtifact,
+  },
+  {
+    title: "Post-Quantum OpenSSL & TLS Hardening",
+    accent: "blue",
+    description: [
+      "Needed a hardened HTTPS endpoint → configured Apache with a self-signed cert, TLS 1.3-only, three AEAD cipher suites, and compression and session tickets disabled → validated with an ImmuniWeb SSL scan.",
+      "Needed to limit attack surface → set UFW rules to allow HTTPS only → exposed a single service port.",
+      "Needed to test quantum-resistant connectivity → built quantum-safe OpenSSL from source and connected to the Open Quantum Safe test server → verified end-to-end with s_server/s_client.",
+    ],
+    tags: [
+      "OpenSSL",
+      "TLS 1.3",
+      "Apache",
+      "Post-Quantum Cryptography",
+      "Hardening",
+      "UFW",
+    ],
+    featured: false,
+    summary:
+      "Hardened Apache to TLS 1.3-only with AEAD ciphers behind an HTTPS-only firewall, and verified quantum-safe OpenSSL against the Open Quantum Safe test server.",
+    artifact: TlsArtifact,
+  },
+  {
+    title: "Secure Remote Access: StrongSwan IKEv2 VPN",
+    accent: "green",
+    description: [
+      "Needed clients to trust the VPN server → built a private CA and issued a server certificate with StrongSwan PKI → clients verify the server before the tunnel comes up.",
+      "Needed secure traffic routing → configured IKEv2, EAP user auth, NAT and kernel IP forwarding, with UFW limiting access → full-tunnel VPN exposing only SSH and IPsec ports.",
+      "Key generation failed on a TPM library error → traced it to a missing libtss2-tcti-tabrmd0 package and installed it → finished the build and validated the tunnel from a Windows client.",
+    ],
+    tags: [
+      "StrongSwan",
+      "IPsec/IKEv2",
+      "PKI",
+      "UFW",
+      "Linux",
+      "Network Security",
+    ],
+    featured: false,
+    summary:
+      "Built a full-tunnel IKEv2/IPsec VPN with a private CA, EAP user auth and UFW exposing only SSH and IPsec ports.",
+    artifact: VpnArtifact,
   },
 ];
 
@@ -232,7 +321,10 @@ type ExperienceEntry = {
   city: string;
   site?: string;
   current?: boolean;
-  headline: string; // the one win a skimming reader should take away
+  headline: string; // one-line summary of the role
+  accent: "blue" | "green" | "red" | "silver";
+  // headline numbers pulled from the bullets, shown as stat tiles
+  stats?: { value: string; label: string }[];
   tags: string[];
   points: { label: string; text: string }[];
 };
@@ -240,60 +332,76 @@ type ExperienceEntry = {
 
 const experience: ExperienceEntry[] = [
   {
-    role: "Security Engineer",
+    role: "Security Engineer Intern",
     org: "Holiday Channel",
     type: "Internship",
     period: "Sep 2026 — Present",
     city: "Colorado, United States",
+    site: "Remote",
     current: true,
-    headline: "Found malware during a code review and drove it to a fix alongside the developers.",
-    tags: ["SAST", "Threat Modelling", "Penetration Testing", "Vulnerability Management"],
+    headline:
+      "Application security and IAM, while leading the security team.",
+    accent: "green",
+    stats: [
+      { value: "7", label: "compromised machines restored" },
+      { value: "2×", label: "weekly security team meetings led" },
+    ],
+    tags: [
+      "SAST",
+      "STRIDE Threat Modeling",
+      "Penetration Testing",
+      "Incident Response",
+      "IAM",
+    ],
     points: [
       {
-        label: "Secure Code Review",
-        text: "Reviewed application code with SAST, threat modelling, and penetration testing — surfaced vulnerabilities and tracked them through vulnerability management.",
+        label: "Application Security Assessments",
+        text: "Assess the company website and source code with SAST, STRIDE threat modeling and pentesting, delivering prioritized mitigation reports.",
       },
       {
-        label: "Malware Discovery & Remediation",
-        text: "Found malware during a code review, escalated it, and provided mitigation — worked alongside developers through remediation until it was fixed.",
+        label: "Malicious Code Incident Response",
+        text: "Detected malicious code in review, defined the containment plan, and worked with developers to remove it and restore 7 compromised machines.",
       },
       {
-        label: "Security Coordination",
-        text: "Ran security meetings twice a week and tracked every team member's tasks — kept findings and fixes moving to closure.",
+        label: "Security Team Leadership",
+        text: "Lead twice-weekly security meetings, assigning and tracking GRC, AppSec and vulnerability management work.",
+      },
+      {
+        label: "IAM & Offboarding",
+        text: "Administer IAM across the engineering toolchain and audit departing employees' access against request records.",
       },
     ],
   },
   {
     role: "Technical Linux Specialist",
-    org: "University of North Carolina at Charlotte",
+    org: "ONEIT, University of North Carolina at Charlotte",
     orgShort: "UNC Charlotte",
     type: "Part-time",
     period: "Oct 2025 — May 2026",
     duration: "8 mos",
     city: "Charlotte, North Carolina, United States",
     site: "On-site",
-    headline: "Remediated 100+ end-of-life Linux workstations and closed unmanaged-endpoint exposure fleet-wide.",
-    tags: ["Linux", "Endpoint Hardening", "Grouper", "Log Analysis"],
+    headline:
+      "Linux endpoint security, access management and Tier 1/2 support for the university fleet.",
+    accent: "blue",
+    stats: [
+      { value: "100+", label: "workstations migrated off EOL" },
+      { value: "25+", label: "workstations decommissioned" },
+      { value: "15+", label: "Tier 1/2 tickets resolved weekly" },
+    ],
+    tags: ["Linux", "Endpoint Hardening", "Grouper", "Log Analysis", "SSH"],
     points: [
       {
-        label: "Endpoint Security",
-        text: "Remediated 100+ EOL Linux workstations, led migration, audited records, found unmanaged endpoints, hardened endpoint security.",
+        label: "Endpoint Migration & Compliance",
+        text: "Migrated 100+ Linux workstations off end-of-life versions, identifying unmanaged endpoints to improve patch compliance.",
       },
       {
-        label: "IAM & Asset Management",
-        text: "Locked down access via Grouper, wiped and decommissioned 25+ unused workstations — closed unmanaged endpoint exposure fleet-wide.",
+        label: "Access Control & Decommissioning",
+        text: "Managed Grouper user and admin groups and securely decommissioned 25+ unused workstations.",
       },
       {
-        label: "Incident Response and Support",
-        text: "Triaged OS/network/config issues onsite, closed 15+ tickets weekly with documented findings — sharpened response and troubleshooting visibility.",
-      },
-      {
-        label: "Log-Based Troubleshooting",
-        text: "Root-caused graphical, network, and boot failures via log analysis — cut repeat incidents.",
-      },
-      {
-        label: "Security Automation",
-        text: "Monitored deployment jobs, remediated failed package installs — kept the secure-imaging pipeline repeatable.",
+        label: "Tier 1/2 Support & Imaging Pipeline",
+        text: "Resolved 15+ Tier 1/2 tickets weekly via SSH and log analysis, and kept the secure imaging pipeline reliable.",
       },
     ],
   },
@@ -306,7 +414,12 @@ const experience: ExperienceEntry[] = [
     duration: "5 mos",
     city: "Charlotte, North Carolina, United States",
     site: "On-site",
-    headline: "Supported 25 students weekly with Python and cryptography troubleshooting.",
+    headline:
+      "Teaching support for a Python and cryptography course: troubleshooting, grading and proctoring.",
+    accent: "silver",
+    stats: [
+      { value: "25", label: "students supported weekly" },
+    ],
     tags: ["Python", "Cryptography", "Canvas", "Gradescope"],
     points: [
       {
@@ -339,7 +452,7 @@ const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 // highlight quantitative tokens and a few key phrases within experience body copy.
 // String.split with a capturing group puts the matches at odd indices.
 const HIGHLIGHT_RE =
-  /(Tier \d+\/\d+|\d+\+|25(?= students)|compliance gaps|AWX\/Ansible|user\/admin access)/;
+  /(Tier \d+\/\d+|\d+\+|25(?= students)|7(?= compromised)|compliance gaps|AWX\/Ansible|user\/admin access)/;
 const highlightMetrics = (text: string) =>
   text.split(HIGHLIGHT_RE).map((part, i) =>
     i % 2 === 1 ? (
@@ -632,7 +745,9 @@ function ExperienceTabs({ jobs }: { jobs: ExperienceEntry[] }) {
             aria-selected={i === selected}
             aria-controls="xp-tabpanel"
             tabIndex={i === selected ? 0 : -1}
-            className={"xp-tab" + (i === selected ? " is-active" : "")}
+            className={
+              `xp-tab accent-${j.accent}` + (i === selected ? " is-active" : "")
+            }
             onClick={() => setSelected(i)}
           >
             <span className="xp-tab-org">
@@ -646,7 +761,7 @@ function ExperienceTabs({ jobs }: { jobs: ExperienceEntry[] }) {
       </div>
 
       <div
-        className="xp-tabpanel"
+        className={`xp-tabpanel accent-${job.accent}`}
         role="tabpanel"
         id="xp-tabpanel"
         aria-labelledby={`xp-tab-${selected}`}
@@ -661,39 +776,42 @@ function ExperienceTabs({ jobs }: { jobs: ExperienceEntry[] }) {
             {job.duration ?? durationSince(start)}
           </span>
         </div>
-        <p className="xp-org">
-          {job.org}
-          <span className="xp-org-extra">
-            <span className="xp-dot">·</span>
-            <span className="xp-type">{job.type}</span>
-            <span className="xp-dot">·</span>
-            <span className="xp-loc">{job.city}</span>
-            {job.site && (
-              <>
-                <span className="xp-dot">·</span>
-                <span className="xp-loc">{job.site}</span>
-              </>
-            )}
-            <span className="xp-dot">·</span>
-            <span className="xp-loc">
-              {start} – {end}
-            </span>
-          </span>
+        <p className="xp-org">{job.org}</p>
+        <p className="xp-meta">
+          {[job.type, job.city, job.site, `${start} – ${end}`]
+            .filter(Boolean)
+            .map((item, i) => (
+              <span key={i} className="xp-meta-item">
+                {item}
+              </span>
+            ))}
         </p>
         <p className="xp-headline">{highlightMetrics(job.headline)}</p>
+        {job.stats && (
+          <dl className="xp-stats">
+            {job.stats.map((stat) => (
+              <div key={stat.label} className="xp-stat">
+                <dt>{stat.value}</dt>
+                <dd>{stat.label}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+        <ul className="xp-points reveal-in">
+          {job.points.map((point) => (
+            <li key={point.label}>
+              <span className="xp-point-label">{point.label}</span>
+              <span className="xp-point-text">
+                {highlightMetrics(point.text)}
+              </span>
+            </li>
+          ))}
+        </ul>
         <div className="tags xp-tags">
           {job.tags.map((tag) => (
             <span key={tag}>{tag}</span>
           ))}
         </div>
-        <ul className="xp-points reveal-in">
-          {job.points.map((point) => (
-            <li key={point.label}>
-              <span className="xp-point-label">{point.label}:</span>{" "}
-              {highlightMetrics(point.text)}
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   );
@@ -844,18 +962,328 @@ function WebAppArtifact() {
         ))}
       </ul>
       <div className="artifact-meta">
-        <span className="artifact-meta-label">Tools</span>
-        <div className="artifact-meta-row">
-          <span className="artifact-chip">Burp Suite</span>
-          <span className="artifact-chip">OWASP ZAP</span>
-          <span className="artifact-chip">SQLMap</span>
+        <span className="artifact-meta-label artifact-meta-label-fix">
+          Remediations provided
+        </span>
+        <div className="artifact-meta-row artifact-fix-grid">
+          <span className="artifact-chip">Parameterized queries</span>
+          <span className="artifact-chip">Context-aware encoding</span>
+          <span className="artifact-chip">Custom input validation</span>
+          <span className="artifact-chip">Allow-listing</span>
+          <span className="artifact-chip">Session-based identity checks</span>
         </div>
       </div>
     </div>
   );
 }
 
-const projectArtifacts = [HomeLabArtifact, ElkArtifact, WebAppArtifact];
+// a left-to-right chain of steps joined by arrows; wraps on narrow panels
+function FlowRow({
+  steps,
+}: {
+  steps: { title: string; sub?: string; strong?: boolean }[];
+}) {
+  return (
+    <ol className="art-flow">
+      {steps.map((step) => (
+        <li
+          key={step.title}
+          className={"art-flow-node" + (step.strong ? " art-flow-strong" : "")}
+        >
+          <span className="art-flow-title">{step.title}</span>
+          {step.sub && <span className="art-flow-sub">{step.sub}</span>}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+// terminal-style key/value config listing
+function ConfigPanel({ rows }: { rows: [string, string][] }) {
+  return (
+    <dl className="art-config">
+      {rows.map(([key, value]) => (
+        <div key={key} className="art-config-row">
+          <dt>{key}</dt>
+          <dd>{value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+// the attack chain recovered from the sample, then what each finding meant
+function MalwareArtifact() {
+  const findings: [string, string][] = [
+    ["XOR decoder + resource extraction", "unpacking"],
+    ["DLL injection into svchost.exe", "evasion"],
+    ['Malicious service "Irmon"', "persistence"],
+    ["WriteFile on keystrokes", "keylogging"],
+    ["31 registry/file changes", "system impact"],
+  ];
+  return (
+    <div className="proj-artifact proj-malware" aria-hidden="true">
+      <span className="proj-artifact-label">Attack chain</span>
+      <FlowRow
+        steps={[
+          { title: "Unpack", sub: "XOR" },
+          { title: "Inject", sub: "svchost" },
+          { title: "Persist", sub: "Irmon" },
+          { title: "Capture", sub: "WriteFile" },
+          { title: "C2", sub: "cmd /c", strong: true },
+        ]}
+      />
+      <table className="elk-table2 art-findings">
+        <thead>
+          <tr>
+            <th>finding</th>
+            <th>stage</th>
+          </tr>
+        </thead>
+        <tbody>
+          {findings.map(([finding, stage]) => (
+            <tr key={finding}>
+              <td>{finding}</td>
+              <td className="art-stage">{stage}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// the hardened server config, then the two connections it was tested with
+function TlsArtifact() {
+  return (
+    <div className="proj-artifact proj-tls" aria-hidden="true">
+      <span className="proj-artifact-label">Hardened config</span>
+      <ConfigPanel
+        rows={[
+          ["protocol", "TLS 1.3 only"],
+          ["ciphers", "AES-128-GCM · AES-256-GCM · ChaCha20-Poly1305"],
+          ["compression", "off"],
+          ["session tickets", "off"],
+          ["exposed ports", "443 only"],
+        ]}
+      />
+      <div className="artifact-meta">
+        <span className="artifact-meta-label">Connections tested</span>
+        <FlowRow
+          steps={[
+            { title: "Client" },
+            { title: "TLS 1.3", sub: "handshake" },
+            { title: "Apache", sub: "hardened", strong: true },
+          ]}
+        />
+        <FlowRow
+          steps={[
+            { title: "Client" },
+            { title: "PQ OpenSSL", sub: "curl" },
+            { title: "OQS server", sub: "post-quantum", strong: true },
+          ]}
+        />
+      </div>
+    </div>
+  );
+}
+
+// the tunnel path, the certificate chain clients check, and the server config
+function VpnArtifact() {
+  return (
+    <div className="proj-artifact proj-vpn" aria-hidden="true">
+      <span className="proj-artifact-label">Tunnel topology</span>
+      <FlowRow
+        steps={[
+          { title: "Windows", sub: "client" },
+          { title: "IKEv2/IPsec", sub: "UDP 500/4500", strong: true },
+          { title: "VPN server", sub: "Ubuntu 22.04" },
+          { title: "Internet" },
+        ]}
+      />
+      <div className="art-pki">
+        <span className="artifact-meta-label">PKI</span>
+        <span className="artifact-chip">Root CA · RSA 4096</span>
+        <span className="art-pki-arrow">→</span>
+        <span className="artifact-chip">Server cert</span>
+      </div>
+      <ConfigPanel
+        rows={[
+          ["tunnel", "IKEv2 / IPsec"],
+          ["auth", "EAP-MSCHAPv2"],
+          ["ciphers", "ChaCha20-Poly1305 · AES-GCM"],
+          ["routing", "NAT + IP forwarding"],
+          ["firewall", "UFW: SSH + IPsec only"],
+        ]}
+      />
+    </div>
+  );
+}
+
+function ProjectBullets({ project, id }: { project: Project; id?: string }) {
+  return (
+    <ul className="project-desc-list" id={id}>
+      {project.description.map((line, di) => (
+        <li key={di}>{line}</li>
+      ))}
+    </ul>
+  );
+}
+
+function ProjectFooter({ project }: { project: Project }) {
+  return (
+    <>
+      <div className="tags">
+        {project.tags.map((tag) => (
+          <span key={tag}>{tag}</span>
+        ))}
+      </div>
+      {project.caseStudySlug && (
+        <a
+          className="project-case-link"
+          href={`/case-studies/${project.caseStudySlug}`}
+        >
+          Read case study →
+        </a>
+      )}
+    </>
+  );
+}
+
+// tier 1: the full card — visual panel beside the write-up
+function FeaturedProjectCard({ project }: { project: Project }) {
+  const Artifact = project.artifact;
+  return (
+    <article className={`project-card accent-${project.accent}`}>
+      <Artifact />
+      <div className="project-body">
+        <h3>{project.title}</h3>
+        <ProjectBullets project={project} />
+        <ProjectFooter project={project} />
+      </div>
+    </article>
+  );
+}
+
+// tier 2: compact card — title, one-line summary, tags and a scaled-down
+// thumbnail of the same visual; the title button opens it in place into the
+// exact full-card content
+function CompactProjectCard({ project }: { project: Project }) {
+  const [open, setOpen] = useState(false);
+  const uid = useId();
+  const visualId = `${uid}-visual`;
+  const bulletsId = `${uid}-bullets`;
+  const Artifact = project.artifact;
+  const cardRef = useRef<HTMLElement>(null);
+  // where the card sat on screen when it was toggled. Opening makes it span
+  // the whole row, which can push it to the next row; after the re-layout
+  // (before paint) scroll by the difference so it stays under the pointer.
+  const anchorTop = useRef<number | null>(null);
+
+  useLayoutEffect(() => {
+    const card = cardRef.current;
+    if (anchorTop.current === null || !card) return;
+    const shift = card.getBoundingClientRect().top - anchorTop.current;
+    anchorTop.current = null;
+    if (Math.abs(shift) > 1) {
+      window.scrollBy({ top: shift, behavior: "instant" });
+    }
+  }, [open]);
+
+  const toggleRef = useRef<HTMLButtonElement>(null);
+
+  // `keepInPlace` anchors the card on screen across the re-layout
+  const setOpenAnchored = (next: boolean, keepInPlace = true) => {
+    anchorTop.current = keepInPlace
+      ? cardRef.current?.getBoundingClientRect().top ?? null
+      : null;
+    setOpen(next);
+  };
+
+  const toggle = () => setOpenAnchored(!open);
+
+  // an open card also closes on a click anywhere else on the page, or Esc
+  useEffect(() => {
+    if (!open) return;
+    const onDocClick = (e: MouseEvent) => {
+      const card = cardRef.current;
+      const target = e.target as Element | null;
+      if (!card || !target || card.contains(target)) return;
+      // a click on another card or a link/button moves the page on its own
+      // (that card anchors itself, nav links scroll), so don't fight it
+      const handledElsewhere = target.closest(".project-compact, a, button");
+      setOpenAnchored(false, !handledElsewhere);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpenAnchored(false);
+      toggleRef.current?.focus();
+    };
+    document.addEventListener("click", onDocClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("click", onDocClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  // clicking anywhere on an open card closes it too — unless it hit a link
+  // or the title button (which toggles itself), or the reader is selecting text
+  const onCardClick = (e: React.MouseEvent) => {
+    if (!open) return;
+    if ((e.target as Element).closest("a, button")) return;
+    if (window.getSelection()?.toString()) return;
+    setOpenAnchored(false);
+  };
+
+  return (
+    <article
+      ref={cardRef}
+      onClick={onCardClick}
+      className={
+        `project-card project-compact accent-${project.accent}` +
+        (open ? " is-open" : "")
+      }
+    >
+      {!open && (
+        <div className="project-thumb" aria-hidden="true">
+          <div className="project-thumb-inner">
+            <Artifact />
+          </div>
+        </div>
+      )}
+      <div id={visualId} className="project-compact-visual" hidden={!open}>
+        {open && <Artifact />}
+      </div>
+      <div className="project-body">
+        <h3>
+          <button
+            type="button"
+            ref={toggleRef}
+            className="project-toggle"
+            aria-expanded={open}
+            aria-controls={`${visualId} ${bulletsId}`}
+            onClick={toggle}
+          >
+            <span className="project-toggle-title">{project.title}</span>
+            <ChevronDown size={16} className="project-toggle-icon" />
+          </button>
+        </h3>
+        {open ? (
+          <ProjectBullets project={project} id={bulletsId} />
+        ) : (
+          <>
+            <div id={bulletsId} hidden />
+            {project.summary && (
+              <p className="project-summary">{project.summary}</p>
+            )}
+          </>
+        )}
+        <ProjectFooter project={project} />
+      </div>
+    </article>
+  );
+}
 
 function App() {
   const active = useActiveWindow();
@@ -961,7 +1389,7 @@ function App() {
                   >
                     <FileText size={17} /> View Resume
                   </a>
-                  <span className="hero-location">
+                  <span className="hero-location hero-availability">
                     <span className="status-dot" />
                     Open to security roles
                   </span>
@@ -1149,35 +1577,53 @@ function App() {
               name="projects"
               active={active === "projects"}
             />
-            <div className="project-grid">
-              {projects.map((project, i) => {
-                const Artifact = projectArtifacts[i];
-                return (
-                  <article
-                    className={`project-card accent-${project.accent}`}
-                    key={project.title}
-                  >
-                    {Artifact && <Artifact />}
-                    <div className="project-body">
-                      <h3>{project.title}</h3>
-                      {Array.isArray(project.description) ? (
-                        <ul className="project-desc-list">
-                          {project.description.map((line, di) => (
-                            <li key={di}>{line}</li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <p>{project.description}</p>
-                      )}
-                      <div className="tags">
-                        {project.tags.map((tag) => (
-                          <span key={tag}>{tag}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </article>
-                );
-              })}
+            <div className="project-tiers">
+              {projects.some((project) => !project.featured) && (
+                <p className="projects-hint">
+                  <span className="projects-hint-cmd">
+                    <span className="term-punc">$</span> cat{" "}
+                    <span className="term-path">{"<project>"}</span>
+                  </span>
+                  <span className="projects-hint-sep">—</span>
+                  <span className="projects-hint-text">
+                    click on a project to expand it
+                  </span>
+                </p>
+              )}
+              {projects.some((project) => project.featured) && (
+                <div className="project-grid">
+                  {projects
+                    .filter((project) => project.featured)
+                    .map((project) => (
+                      <FeaturedProjectCard
+                        key={project.title}
+                        project={project}
+                      />
+                    ))}
+                </div>
+              )}
+              {projects.some((project) => !project.featured) && (
+                <>
+                  {projects.some((project) => project.featured) && (
+                    <p className="projects-more">
+                      <span className="term-user">hari@kali</span>
+                      <span className="term-punc">:</span>
+                      <span className="term-path">~/projects</span>
+                      <span className="term-punc">$</span> ls more-projects/
+                    </p>
+                  )}
+                  <div className="project-compact-grid">
+                    {projects
+                      .filter((project) => !project.featured)
+                      .map((project) => (
+                        <CompactProjectCard
+                          key={project.title}
+                          project={project}
+                        />
+                      ))}
+                  </div>
+                </>
+              )}
             </div>
           </section>
 

@@ -9,14 +9,14 @@
   text-rendering: optimizeLegibility;
 
   /* calm navy palette: the original blue, toned down part-way */
-  --bg: #080f24;
-  --bg-2: #0a1330;
+  --bg: #081026;
+  --bg-2: #0a1432;
   --bg-glow: rgba(84, 144, 223, 0.08);
-  --surface: rgba(10, 16, 38, 0.97);
-  --surface-2: rgba(16, 26, 57, 0.9);
-  --surface-3: rgba(49, 92, 174, 0.2);
-  --card-grad-a: rgba(16, 26, 57, 0.78);
-  --card-grad-b: rgba(10, 16, 38, 0.82);
+  --surface: rgba(10, 17, 40, 0.97);
+  --surface-2: rgba(16, 27, 59, 0.9);
+  --surface-3: rgba(49, 93, 175, 0.2);
+  --card-grad-a: rgba(16, 27, 59, 0.78);
+  --card-grad-b: rgba(10, 17, 40, 0.82);
 
   --text: #f3f6fb;
   --text-2: #c0d0ea;
@@ -28,7 +28,7 @@
   --name-stroke: rgba(195, 206, 222, 0.9);
   --shadow: 0 50px 120px -40px rgba(0, 0, 0, 0.7);
 
-  --panel: rgba(16, 26, 57, 0.85);
+  --panel: rgba(16, 27, 59, 0.85);
   --muted: #f3f6fb;
   --cyan: #5490df;          /* primary accent */
   --blue: #74a5e8;          /* lighter accent for links and labels */
@@ -1775,7 +1775,7 @@ h3 {
 
 /* the one win per role, then its tools, then the detail */
 .xp-headline {
-  margin: 12px 0 12px;
+  margin: 12px 0 16px;
   padding: 8px 0 8px 14px;
   border-left: 2px solid var(--blue);
   font-size: 15px;
@@ -1785,7 +1785,7 @@ h3 {
 }
 
 .tags.xp-tags {
-  margin: 0 0 14px;
+  margin: 18px 0 0;
 }
 
 .tags.xp-tags span {
@@ -2735,4 +2735,912 @@ h3 {
 .topo2-ldaps-label {
   color: var(--c-green);
   background: rgba(var(--c-green-rgb), 0.12);
+}
+
+/* ---- new project artifacts: step flows, config panels, PKI chain ---- */
+.art-flow {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.art-flow-node {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  padding: 5px 4px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  text-align: center;
+}
+
+/* arrow between consecutive steps */
+.art-flow-node + .art-flow-node {
+  position: relative;
+  margin-left: 14px;
+}
+
+.art-flow-node + .art-flow-node::before {
+  content: "→";
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.art-flow-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.art-flow-sub {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 8.5px;
+  color: var(--text-3);
+}
+
+.project-card[class*="accent-"] .art-flow-strong {
+  border-color: rgba(var(--accent-rgb), 0.55);
+  background: rgba(var(--accent-rgb), 0.1);
+}
+
+.project-card[class*="accent-"] .art-flow-strong .art-flow-title {
+  color: var(--accent);
+}
+
+.artifact-meta .art-flow + .art-flow {
+  margin-top: 4px;
+}
+
+/* terminal-style key/value config */
+.art-config {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.proj-tls .art-config {
+  margin-top: 0;
+}
+
+.art-config-row {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 8px;
+}
+
+.art-config dt {
+  color: var(--text-3);
+}
+
+.art-config dt::after {
+  content: ":";
+}
+
+.art-config dd {
+  margin: 0;
+  color: var(--text-2);
+}
+
+.project-card[class*="accent-"] .art-config dd {
+  color: var(--accent);
+}
+
+/* malware findings table under the chain */
+.art-findings {
+  margin-top: 12px;
+}
+
+.art-findings .art-stage {
+  font-weight: 700;
+  color: var(--accent, var(--blue));
+}
+
+/* VPN certificate chain */
+.art-pki {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.art-pki .artifact-meta-label {
+  margin-right: 2px;
+}
+
+.art-pki-arrow {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+/* phones: let step flows wrap instead of squeezing the labels */
+@media (max-width: 480px) {
+  .art-flow {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  .art-flow-node {
+    flex: 1 0 auto;
+    padding: 5px 7px;
+  }
+
+  .art-config-row {
+    grid-template-columns: 84px 1fr;
+  }
+}
+
+/* ==================================================================
+   projects: two tiers — full featured cards, then compact cards that
+   open in place into the same full content
+   ================================================================== */
+
+/* one running number across both tiers */
+.project-tiers {
+  counter-reset: proj;
+}
+
+.project-tiers .project-grid {
+  counter-reset: none;
+}
+
+/* terminal-style subheading between the tiers */
+.projects-more {
+  margin: 40px 0 16px;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--text-2);
+}
+
+.project-compact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .project-compact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .project-compact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* an opened card takes the whole row and lays out like a full card */
+.project-compact.is-open {
+  grid-column: 1 / -1;
+}
+
+.project-compact {
+  position: relative;
+}
+
+/* collapsed: thumbnail on top, then title, summary and tags */
+.project-compact:not(.is-open) {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+  padding: 16px 16px 18px;
+}
+
+.project-compact:not(.is-open) .project-body {
+  flex: 1 1 auto;
+}
+
+.project-compact:not(.is-open) .tags {
+  margin-top: 0;
+}
+
+.project-compact .project-compact-visual[hidden] {
+  display: none;
+}
+
+/* the opened visual slot takes the same column the full card's panel does */
+.project-compact-visual {
+  flex: 0 0 380px;
+  max-width: 100%;
+  align-self: stretch;
+  display: flex;
+}
+
+.project-compact-visual > .proj-artifact {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 700px) {
+  .project-compact-visual {
+    flex-basis: auto;
+    width: 100%;
+  }
+}
+
+/* thumbnail: the same visual panel, shown whole at a smaller size. `zoom`
+   (unlike transform) shrinks the layout box too, so the slot is exactly as
+   tall as the scaled diagram and nothing is clipped */
+.project-thumb {
+  display: flex;
+  justify-content: center;
+}
+
+.project-thumb-inner {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.project-thumb-inner > .proj-artifact {
+  width: 380px;
+  max-width: none;
+  zoom: 0.72;
+}
+
+/* title row: running number, then the toggle button */
+.project-compact h3 {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.project-compact:not(.is-open) h3 {
+  font-size: 17px;
+}
+
+.project-toggle {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* while collapsed, the whole card is the click target */
+.project-compact:not(.is-open) .project-toggle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.project-toggle-icon {
+  flex-shrink: 0;
+  margin-top: 4px;
+  color: var(--accent, var(--blue));
+  transition: transform 200ms ease;
+}
+
+.project-compact.is-open .project-toggle-icon {
+  transform: rotate(180deg);
+}
+
+.project-toggle:focus-visible {
+  outline: 2px solid var(--accent, var(--blue));
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.project-compact:not(.is-open):has(.project-toggle:focus-visible) {
+  border-color: rgba(var(--accent-rgb, var(--hl-rgb)), 0.7);
+}
+
+.project-compact:not(.is-open) .project-toggle:focus-visible {
+  outline: none;
+}
+
+.project-compact:not(.is-open) .project-toggle:focus-visible::after {
+  outline: 2px solid var(--accent, var(--blue));
+  outline-offset: 3px;
+}
+
+.project-card p.project-summary {
+  margin: 0 0 14px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* optional case-study link sits above the card's click overlay */
+.project-case-link {
+  position: relative;
+  z-index: 1;
+  align-self: flex-start;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent, var(--blue));
+  text-decoration: none;
+}
+
+.project-case-link:hover {
+  text-decoration: underline;
+}
+
+/* open animation, skipped for reduced-motion users */
+@keyframes project-open {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.project-compact.is-open .project-compact-visual,
+.project-compact.is-open .project-desc-list {
+  animation: project-open 260ms ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-compact.is-open .project-compact-visual,
+  .project-compact.is-open .project-desc-list {
+    animation: none;
+  }
+
+  .project-toggle-icon,
+  .project-compact {
+    transition: none;
+  }
+
+  .project-compact:hover {
+    transform: none;
+  }
+}
+
+/* hint above the project cards: they open on click — a tinted pill so
+   it reads as an instruction rather than a caption */
+.projects-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: fit-content;
+  margin: -14px auto 24px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--hl-rgb), 0.45);
+  background: rgba(var(--hl-rgb), 0.12);
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--heading, var(--text));
+}
+
+.projects-hint svg {
+  flex-shrink: 0;
+  color: var(--hl, var(--blue));
+}
+
+.projects-hint-cmd {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12.5px;
+}
+
+.projects-hint-cmd .term-punc {
+  color: var(--hl, var(--blue));
+}
+
+.projects-hint-sep {
+  color: var(--text-3);
+}
+
+/* keep the command and the instruction whole; on narrow screens they stack */
+.projects-hint-cmd,
+.projects-hint-text {
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .projects-hint {
+    flex-wrap: wrap;
+    row-gap: 2px;
+    border-radius: 14px;
+    text-align: center;
+  }
+
+  .projects-hint-sep {
+    display: none;
+  }
+}
+
+/* opened project: more breathing room than the old full cards */
+.project-compact.is-open {
+  padding: 36px 36px 34px;
+  gap: 40px;
+}
+
+.project-compact.is-open .project-compact-visual {
+  flex-basis: 420px;
+}
+
+.project-compact.is-open .project-compact-visual > .proj-artifact {
+  padding: 18px 20px;
+}
+
+.project-compact.is-open h3 {
+  margin-bottom: 20px;
+}
+
+.project-compact.is-open .project-desc-list {
+  font-size: 14.5px;
+  line-height: 1.75;
+}
+
+.project-compact.is-open .project-desc-list li {
+  margin-bottom: 16px;
+}
+
+.project-compact.is-open .project-desc-list li:last-child {
+  margin-bottom: 0;
+}
+
+.project-compact.is-open .tags {
+  margin-top: 26px;
+  gap: 10px;
+}
+
+@media (max-width: 700px) {
+  .project-compact.is-open {
+    padding: 24px 20px;
+    gap: 24px;
+  }
+
+  .project-compact.is-open .project-compact-visual {
+    flex-basis: auto;
+  }
+}
+
+/* an open card closes on click, so show it as clickable */
+.project-compact.is-open {
+  cursor: pointer;
+}
+
+/* opened project: the diagram panel hugs its content instead of stretching
+   to the height of the text column */
+.project-compact.is-open .project-compact-visual {
+  align-self: flex-start;
+}
+
+/* opened project: larger diagram lettering. `zoom` scales text and boxes
+   together, so the diagram keeps its proportions and still fits its column */
+@media (min-width: 701px) {
+  .project-compact.is-open .project-compact-visual > .proj-artifact {
+    zoom: 1.15;
+  }
+}
+
+.project-compact.is-open .project-compact-visual > .proj-artifact {
+  align-self: flex-start;
+}
+
+@media (max-width: 700px) {
+  .project-compact.is-open .project-compact-visual {
+    align-self: stretch;
+  }
+}
+
+/* green "Remediations" heading; the chips use the standard artifact chip */
+.artifact-meta-label-fix {
+  color: var(--c-green);
+}
+
+/* remediations as an even grid: equal-width chips in two columns, the last
+   one spanning the full row when the count is odd */
+.artifact-fix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.artifact-fix-grid .artifact-chip {
+  padding: 6px 10px;
+  font-size: 11px;
+  text-align: center;
+  /* white in dark mode; the heading ink in light mode, where white would
+     vanish on the white panel */
+  color: var(--heading, var(--text));
+}
+
+.artifact-fix-grid .artifact-chip:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* home lab, malware analysis and VPN: centre the diagram beside the text */
+.project-compact.is-open .project-compact-visual:has(> .proj-topology),
+.project-compact.is-open .project-compact-visual:has(> .proj-malware),
+.project-compact.is-open .project-compact-visual:has(> .proj-vpn) {
+  align-self: center;
+}
+
+@media (max-width: 700px) {
+  .project-compact.is-open .project-compact-visual:has(> .proj-topology),
+  .project-compact.is-open .project-compact-visual:has(> .proj-malware),
+  .project-compact.is-open .project-compact-visual:has(> .proj-vpn) {
+    align-self: stretch;
+  }
+}
+
+/* home lab, opened: a taller panel with more room above and below the diagram */
+@media (min-width: 701px) {
+  .project-compact.is-open .project-compact-visual > .proj-topology {
+    padding-top: 30px;
+    padding-bottom: 34px;
+  }
+
+  .project-compact.is-open .proj-topology .proj-artifact-label {
+    margin-bottom: 18px;
+  }
+}
+
+/* VPN config panel: a little more air between the rows */
+.proj-vpn .art-config {
+  padding: 10px 12px;
+}
+
+.proj-vpn .art-config-row + .art-config-row {
+  margin-top: 5px;
+}
+
+/* desktop grid: pull the TLS card up into the space under the shorter Home
+   Lab card above it. Only while every card is collapsed (an opened card
+   reflows the grid), and only in the 3-column layout */
+@media (min-width: 1025px) {
+  .project-compact-grid:not(:has(.is-open))
+    .project-compact:has(.proj-tls) {
+    margin-top: -24px;
+  }
+}
+
+/* desktop grid: nudge the Home Lab card down a little within its row */
+@media (min-width: 1025px) {
+  .project-compact-grid:not(:has(.is-open))
+    .project-compact:has(.proj-topology) {
+    margin-top: 20px;
+  }
+}
+
+/* Home Lab preview: a larger diagram on the collapsed card */
+.project-thumb-inner > .proj-topology {
+  zoom: 0.82;
+}
+
+@media (max-width: 420px) {
+  .project-thumb-inner > .proj-topology {
+    zoom: 0.72;
+  }
+}
+
+/* "Open to security roles": a touch larger than the location line */
+.hero-location.hero-availability {
+  font-size: 13px;
+}
+
+/* ==================================================================
+   experience: a more scannable role panel — accent per role, the key
+   numbers as stat tiles, and each bullet as its own small card
+   ================================================================== */
+
+/* role accent on the active tab's edge and the panel's top edge */
+.xp-tab[class*="accent-"].is-active {
+  border-left-color: var(--accent);
+}
+
+.xp-tabpanel[class*="accent-"] {
+  padding: 26px 28px 24px;
+  box-shadow: inset 0 2px 0 rgba(var(--accent-rgb), 0.6);
+}
+
+:root[data-theme="light"] .xp-tabpanel[class*="accent-"] {
+  box-shadow:
+    inset 0 2px 0 rgba(var(--accent-rgb), 0.75),
+    0 6px 20px -12px rgba(26, 35, 72, 0.28);
+}
+
+.xp-tabpanel .xp-heading h3 {
+  font-size: 22px;
+}
+
+/* organisation on its own line, details below it — no leading separator
+   when the details wrap */
+.xp-tabpanel .xp-org {
+  margin: 4px 0 0;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--accent, var(--blue));
+}
+
+/* separators sit in each item's left padding; the list is shifted left by
+   that padding and its first 20px clipped away, so an item that wraps to
+   the start of a line never shows a leading dot */
+.xp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 0;
+  margin: 4px 0 0 -20px;
+  clip-path: inset(0 0 0 20px);
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+.xp-meta-item {
+  position: relative;
+  padding-left: 20px;
+}
+
+.xp-meta-item::before {
+  content: "·";
+  position: absolute;
+  left: 7px;
+  opacity: 0.7;
+}
+
+.xp-tabpanel .xp-headline {
+  margin: 18px 0 18px;
+  border-left-color: var(--accent, var(--blue));
+  font-size: 15.5px;
+}
+
+/* key numbers: a fixed 3-column track so tiles are the same size in
+   every role, however many it has */
+.xp-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 18px;
+}
+
+.xp-stat {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(var(--accent-rgb, var(--hl-rgb)), 0.28);
+  background: rgba(var(--accent-rgb, var(--hl-rgb)), 0.07);
+}
+
+.xp-stat dt {
+  font-family: "Space Grotesk", "Open Sans", sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--accent, var(--blue));
+}
+
+.xp-stat dd {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-2);
+}
+
+/* bullets as small cards in two columns */
+.xp-tabpanel .xp-points {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* an odd last card spans the row instead of leaving a hole */
+.xp-tabpanel .xp-points li:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.xp-tabpanel .xp-points li {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+:root[data-theme="light"] .xp-tabpanel .xp-points li {
+  background: rgba(var(--hl-rgb), 0.03);
+}
+
+.xp-tabpanel .xp-point-label {
+  font-family: "Space Grotesk", "Open Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--heading, var(--text));
+}
+
+.xp-tabpanel .xp-point-label::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 8px;
+  border-radius: 2px;
+  background: var(--accent, var(--blue));
+  vertical-align: 2px;
+}
+
+.xp-tabpanel .xp-metric {
+  color: var(--accent, var(--blue));
+}
+
+.xp-tabpanel .tags.xp-tags {
+  margin-top: 20px;
+}
+
+@media (max-width: 760px) {
+  .xp-tabpanel[class*="accent-"] {
+    padding: 20px 18px;
+  }
+
+  .xp-tabpanel .xp-points {
+    grid-template-columns: 1fr;
+  }
+
+  .xp-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .xp-stat dt {
+    font-size: 22px;
+  }
+
+  /* title and Current badge wrap cleanly, badge flush left */
+  .xp-tabpanel .xp-heading h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    font-size: 20px;
+  }
+
+  .xp-tabpanel .xp-current {
+    margin-left: 0;
+  }
+}
+
+/* stat tiles: smaller, with the number and its label side by side */
+.xp-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+}
+
+.xp-stat dt {
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+.xp-stat dd {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+@media (max-width: 760px) {
+  .xp-stat dt {
+    font-size: 18px;
+  }
+}
+
+/* stat tiles sized to their content so each label stays on one line */
+.xp-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.xp-stat dd {
+  white-space: nowrap;
+}
+
+/* very narrow phones: let a long label wrap rather than overflow */
+@media (max-width: 420px) {
+  .xp-stat {
+    max-width: 100%;
+  }
+
+  .xp-stat dd {
+    white-space: normal;
+  }
+}
+
+/* slightly tighter tiles so three fit on one row in the desktop panel */
+.xp-stats {
+  gap: 8px;
+}
+
+.xp-stat {
+  gap: 8px;
+  padding: 7px 11px;
+}
+
+.xp-stat dt {
+  font-size: 19px;
+}
+
+.xp-stat dd {
+  font-size: 11.5px;
+}
+
+/* skills: all text in white (the heading ink, so it stays dark in light mode) */
+#skills .skill-group-title,
+#skills .skills > span {
+  color: var(--heading, var(--text));
+}
+
+/* skills group titles: bolder. Space Grotesk tops out at 700, so a hairline
+   stroke in the same colour thickens the letters */
+#skills .skill-group-title {
+  font-size: 13px;
+  -webkit-text-stroke: 0.4px currentColor;
+}
+
+/* ==================================================================
+   light mode, softened: no large pure-white areas. The page is a calm
+   blue-grey, the terminal window a soft off-white, and cards sit a step
+   lighter so they still lift off it. Text drops from near-black to a deep
+   slate to cut glare-level contrast.
+   ================================================================== */
+:root[data-theme="light"] {
+  --bg: #d9dee9;
+  --surface: #f4f6fa;
+  --surface-2: rgba(244, 246, 250, 0.92);
+  --surface-3: #cdd3e2;
+  --card-grad-a: #dfe3ed;
+  --card-grad-b: #d3d8e5;
+
+  --text: #1a2136;
+  --text-2: #2f3853;
+  --text-3: #4a5370;
+  --muted: #262d47;
+  --heading: #161c30;
+}
+
+:root[data-theme="light"] .terminal {
+  background: #eef1f6;
+}
+
+:root[data-theme="light"] .project-card,
+:root[data-theme="light"] .cert-card,
+:root[data-theme="light"] .xp-tabpanel {
+  background: #f6f8fb;
+}
+
+:root[data-theme="light"] .proj-artifact {
+  background: #fbfcfe;
+}
+
+:root[data-theme="light"] .xp-tabpanel .xp-points li {
+  background: #eef1f6;
+}
+
+:root[data-theme="light"] .xp-tab.is-active {
+  background: rgba(var(--hl-rgb), 0.1);
 }
